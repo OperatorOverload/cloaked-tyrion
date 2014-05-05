@@ -1,6 +1,8 @@
 
 import urlparse, os, requests
 from pyquery import PyQuery as pq
+from slugify import slugify
+from multiprocessing import Pool
 
 def process(dossier):
     print "Processing %s" % dossier
@@ -11,15 +13,30 @@ def process(dossier):
     if not os.path.exists(path):
         os.mkdir(path)
 
-    if not os.path.exists(os.path.join(path, "main.html")):
-        print "Fetching"
-        html = fetch(url(dossier))
-
-        print "Storing"
-        store(os.path.join(path, "main.html"), html)
+    get(url(dossier), os.path.join(path, "main.html"))
 
     print "Finding sublinks"
-    print sublinks(os.path.join(path, "main.html"), url)
+    links = [(link, os.path.join(path, "%s.html" % name))
+             for name, link in
+             sublinks(os.path.join(path, "main.html"), url(dossier))
+             if "toxicological" in name]
+
+    print "Found %d" % len(links)
+
+    pool = Pool(5)
+    pool.map(_get, links)
+
+def _get(tuple):
+    url, path = tuple
+    return get(url, path)
+
+def get(url, path):
+    if not os.path.exists(path):
+        print "Fetching %s" % url
+        html = fetch(url)
+
+        print "Storing %s" % path
+        store(path, html)
 
 def store(path, text):
     f = open(path, "w")
@@ -41,21 +58,21 @@ def url(dossier):
 
 def sublinks(file, base_url):
     d = pq(filename=file)
-    name(pq(d("#toc")("a")[2]))
-    #print [(name(pq(a)), pq(a).attr("href")) for a in d("#toc")("a")]
+    d.make_links_absolute(base_url=base_url)
+
+    return ((name(pq(a)), pq(a).attr("href")) for a in d("#toc")("a"))
 
 def name(link):
-    name = link.text()
+    name = slugify(link.text())
 
     parent = link.parent()
     while parent[0].tag != "div":
         if parent[0].tag == "ul" and parent.siblings("p").length > 0:
-            name = "%s-%s" % (parent.siblings("p").text(), name)
+            name = "%s__%s" % (slugify(parent.siblings("p").text()), name)
 
         parent = parent.parent()
 
     return name
-
 
 if __name__ == '__main__':
     for line in open("dossiers.txt"):
