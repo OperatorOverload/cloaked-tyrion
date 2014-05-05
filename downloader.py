@@ -3,11 +3,11 @@ import urlparse, os, requests
 from pyquery import PyQuery as pq
 from slugify import slugify
 from multiprocessing import Pool
+from datetime import datetime
 
 def process(dossier):
     print "Processing %s" % dossier
-    print url(dossier)
-    #url = url(dossier)
+    start = datetime.now()
     path = os.path.normpath(os.path.join(os.getcwd(),
                                          "data", dossier))
     if not os.path.exists(path):
@@ -21,13 +21,22 @@ def process(dossier):
              sublinks(os.path.join(path, "main.html"), url(dossier))
              if "toxicological" in name]
 
-    print "Found %d" % len(links)
+    L = len(links)
 
-    pool = Pool(5)
+    links = enumerate(((L, url, path) for url, path in links))
+
+    pool = Pool(10)
     pool.map(_get, links)
 
+    end = datetime.now()
+
+    print "Finished %s in %s" % (dossier, end-start)
+
 def _get(tuple):
-    url, path = tuple
+    N, tuple = tuple
+    L, url, path = tuple
+
+    print "Sublink %d/%d" % (N, L)
     return get(url, path)
 
 def get(url, path):
@@ -77,4 +86,3 @@ def name(link):
 if __name__ == '__main__':
     for line in open("dossiers.txt"):
         process(line.strip())
-        break
