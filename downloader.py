@@ -1,5 +1,5 @@
 
-import urlparse, os, requests
+import urlparse, os, requests, tarfile, shutil, signal
 from pyquery import PyQuery as pq
 from slugify import slugify
 from multiprocessing import Pool
@@ -8,8 +8,14 @@ from datetime import datetime
 def process(dossier):
     print "Processing %s" % dossier
     start = datetime.now()
-    path = os.path.normpath(os.path.join(os.getcwd(),
-                                         "data", dossier))
+    base_path = os.path.normpath(os.path.join(os.getcwd(), "data"))
+
+    path = os.path.join(base_path, dossier)
+
+    if os.path.exists("%s.tar.gz" % path):
+        print "Already have %s" % dossier
+        return None
+
     if not os.path.exists(path):
         os.mkdir(path)
 
@@ -23,14 +29,38 @@ def process(dossier):
 
     L = len(links)
 
-    links = enumerate(((L, url, path) for url, path in links))
+    if L > 0:
+        links = enumerate(((L, url, path) for url, path in links))
+        pool = Pool(10, init_worker)
 
-    pool = Pool(10)
-    pool.map(_get, links)
+        try:
+            pool.map(_get, links)
+        except KeyboardInterrupt:
+            pool.terminate()
+            pool.join()
+        else:
+            pool.close()
+            pool.join();
 
+        compress(base_path, dossier)
+
+    cleanup(path)
     end = datetime.now()
 
     print "Finished %s in %s" % (dossier, end-start)
+
+def init_worker():
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
+
+def cleanup(path):
+    shutil.rmtree(path)
+
+def compress(base_path, dossier):
+    target = os.path.join(base_path, "%s.tar.gz" % dossier)
+    source = os.path.join(base_path, dossier)
+
+    with tarfile.open(target, "w:gz") as tar:
+        tar.add(source, arcname=os.path.basename(source))
 
 def _get(tuple):
     N, tuple = tuple
@@ -86,3 +116,4 @@ def name(link):
 if __name__ == '__main__':
     for line in open("dossiers.txt"):
         process(line.strip())
+        break
