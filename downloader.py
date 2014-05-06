@@ -34,7 +34,7 @@ def process(dossier):
     links = [(link, os.path.join(path, "%s.html" % name))
              for name, link in
              sublinks(os.path.join(path, "main.html"), url(dossier))
-             if "toxicological" in name]
+             if "toxicological" in name or "physical" in name]
 
     L = len(links)
 
