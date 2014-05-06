@@ -1,9 +1,18 @@
 
-import urlparse, os, requests, tarfile, shutil, signal
+import urlparse, os, requests, tarfile, shutil, signal, time
+
 from pyquery import PyQuery as pq
 from slugify import slugify
 from multiprocessing import Pool
 from datetime import datetime
+
+MAX_TIMEOUT = 1024
+
+class ScrapingError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 def process(dossier):
     print "Processing %s" % dossier
@@ -69,13 +78,22 @@ def _get(tuple):
     print "Sublink %d/%d" % (N, L)
     return get(url, path)
 
-def get(url, path):
+def get(url, path, timeout=2):
     if not os.path.exists(path):
         print "Fetching %s" % url
-        html = fetch(url)
+        try:
+            html = fetch(url)
+        except requests.exceptions.RequestException:
+            print "Sleeping for %d" % timeout
 
-        print "Storing %s" % path
-        store(path, html)
+            if timeout >= MAX_TIMEOUT:
+                raise ScrapingError("Failed to fetch %s" % url)
+
+            time.sleep(timeout)
+            get(url, path, timeout*3)
+        else:
+            print "Storing %s" % path
+            store(path, html)
 
 def store(path, text):
     f = open(path, "w")
