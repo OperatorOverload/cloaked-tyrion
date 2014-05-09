@@ -134,3 +134,5 @@ def name(link):
 if __name__ == '__main__':
     for line in open("dossiers.txt"):
         process(line.strip())
+
+    print "Done."
