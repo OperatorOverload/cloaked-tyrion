@@ -72,14 +72,34 @@ class ECHA_TOX_DNEL(db.Entity):
     SENS_ENDP = Optional(unicode)
     ROUTE = Optional(unicode)
 
+def find_or_create(model, **kwargs):
+    obj = model.get(**kwargs)
+    if obj == None:
+        obj = model(**kwargs)
+
+    return obj
+
 db.generate_mapping(create_tables=True)
 
 @db_session
 def parse(path):
-    print path
+    path = unpack(path)
+
+    substance = find_or_create(Substance, DOSSIER_ID=os.path.split(path)[1])
+    print substance
+
+def unpack(path):
+    unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
+                            os.path.split(path)[1].replace(".tar.gz", ""))
+
+    if not os.path.exists(unpacked):
+        with tarfile.open(path, "r:gz") as tar:
+            tar.extractall(os.path.join(os.getcwd(), "data"))
+
+    return unpacked
 
 if __name__ == "__main__":
 
     for file in os.listdir(os.path.join(os.getcwd(), "data")):
-        if file.startswith("DISS"):
+        if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
