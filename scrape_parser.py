@@ -1,6 +1,8 @@
 
-import os, tarfile
+import os, tarfile, glob
 from pony.orm import *
+from slugify import slugify
+from pyquery import PyQuery as pq
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
 
@@ -79,14 +81,30 @@ def find_or_create(model, **kwargs):
 
     return obj
 
+def build_path(base, parts):
+    return "%s.html" % os.path.join(base,
+                            "__".join([slugify(part) for part in parts]))
+
 db.generate_mapping(create_tables=True)
+
+@db_session
+def ecotoxicological(substance, path):
+    files = build_path(path,
+                       ["ecotoxicological information",
+                        "ecotoxicological information NNN"])
+
+    for file in glob.glob(files.replace("nnn", "*")):
+        d = pq(filename=file)
+        print d
+    #    print d(".en
 
 @db_session
 def parse(path):
     path = unpack(path)
 
     substance = find_or_create(Substance, DOSSIER_ID=os.path.split(path)[1])
-    print substance
+
+    ecotoxicological(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
