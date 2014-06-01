@@ -5,6 +5,7 @@ from slugify import slugify
 from pyquery import PyQuery as pq
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
+MAX_LENGTH=350
 
 class Substance(db.Entity):
     DOSSIER_ID = PrimaryKey(unicode)
@@ -17,64 +18,64 @@ class Substance(db.Entity):
 class ECHA_ECOTOX_PNEC(db.Entity):
     SUBST_ID = Required(Substance)
     PNEC_ID = PrimaryKey(int, auto=True)
-    SOURCE = Optional(unicode)
-    COMPARTMENT = Optional(unicode)
-    TARGET = Optional(unicode)
-    HAC = Optional(unicode)
-    VALUE = Optional(unicode)
-    UNIT = Optional(unicode)
-    ASS_FAC = Optional(unicode)
-    EXTR_METH = Optional(unicode)
+    SOURCE = Optional(unicode, MAX_LENGTH)
+    COMPARTMENT = Optional(unicode, MAX_LENGTH)
+    TARGET = Optional(unicode, MAX_LENGTH)
+    HAC = Optional(unicode, MAX_LENGTH)
+    VALUE = Optional(unicode, MAX_LENGTH)
+    UNIT = Optional(unicode, MAX_LENGTH)
+    ASS_FAC = Optional(unicode, MAX_LENGTH)
+    EXTR_METH = Optional(unicode, MAX_LENGTH)
 
 class ECHA_ECOTOX_TOX_ADM(db.Entity):
     SUBST_ID = Required(Substance)
     TOX_ID = PrimaryKey(int, auto=True)
     TOX_TYPE = Required(unicode) # AQUA, TERRESTRIAL, SEDIMENT
-    ESR = Optional(unicode)
-    RELIABILITY = Optional(unicode)
-    GUIDELINE = Optional(unicode)
-    QUALIFIER = Optional(unicode)
-    GLP = Optional(unicode)
-    ORGANISM = Optional(unicode)
+    ESR = Optional(unicode, MAX_LENGTH)
+    RELIABILITY = Optional(unicode, MAX_LENGTH)
+    GUIDELINE = Optional(unicode, MAX_LENGTH)
+    QUALIFIER = Optional(unicode, MAX_LENGTH)
+    GLP = Optional(unicode, MAX_LENGTH)
+    ORGANISM = Optional(unicode, MAX_LENGTH)
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
 
 class ECHA_ECOTOX_TOX_REF(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
     TOX_REF_ID = PrimaryKey(int, auto=True)
-    REFERENCE_TYPE = Optional(unicode)
-    REFERENCE_AUTHOR = Optional(unicode)
-    REFERENCE_YEAR = Optional(unicode)
-    REFERENCE_TITLE = Optional(unicode)
-    REFERENCE_SOURCE = Optional(unicode)
+    REFERENCE_TYPE = Optional(unicode, MAX_LENGTH)
+    REFERENCE_AUTHOR = Optional(unicode, MAX_LENGTH)
+    REFERENCE_YEAR = Optional(unicode, MAX_LENGTH)
+    REFERENCE_TITLE = Optional(unicode, MAX_LENGTH)
+    REFERENCE_SOURCE = Optional(unicode, MAX_LENGTH)
 
 class ECHA_ECOTOX_TOX_DATA(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
     TOX_DATA_ID = PrimaryKey(int, auto=True)
-    ORGANISM = Optional(unicode)
-    EXP_DURATION_VALUE = Optional(unicode)
-    EXP_DURATION_UNIT = Optional(unicode)
-    ENDPOINT = Optional(unicode)
-    EFF_CONC = Optional(unicode)
-    EFF_CONC_UNIT = Optional(unicode)
-    BASIC_CONC = Optional(unicode)
-    EFF_CONC_TYPE = Optional(unicode)
-    BASIS_EFFECT = Optional(unicode)
-    REMARKS = Optional(unicode)
+    ORGANISM = Optional(unicode, MAX_LENGTH)
+    EXP_DURATION_VALUE = Optional(unicode, MAX_LENGTH)
+    EXP_DURATION_UNIT = Optional(unicode, MAX_LENGTH)
+    ENDPOINT = Optional(unicode, MAX_LENGTH)
+    EFF_CONC = Optional(unicode, MAX_LENGTH)
+    EFF_CONC_UNIT = Optional(unicode, MAX_LENGTH)
+    BASIC_CONC = Optional(unicode, MAX_LENGTH)
+    EFF_CONC_TYPE = Optional(unicode, MAX_LENGTH)
+    BASIS_EFFECT = Optional(unicode, MAX_LENGTH)
+    REMARKS = Optional(unicode, MAX_LENGTH)
 
 
 class ECHA_TOX_DNEL(db.Entity):
     SUBST_ID = Required(Substance)
     DNEL_ID = PrimaryKey(int, auto=True)
-    SOURCE = Optional(unicode)
-    TARGET = Optional(unicode)
-    EFFECTS = Optional(unicode)
-    EXPOSURE = Optional(unicode)
-    HAC = Optional(unicode)
-    VALUE = Optional(unicode)
-    UNIT = Optional(unicode)
-    SENS_ENDP = Optional(unicode)
-    ROUTE = Optional(unicode)
+    SOURCE = Optional(unicode, MAX_LENGTH)
+    TARGET = Optional(unicode, MAX_LENGTH)
+    EFFECTS = Optional(unicode, MAX_LENGTH)
+    EXPOSURE = Optional(unicode, MAX_LENGTH)
+    HAC = Optional(unicode, MAX_LENGTH)
+    VALUE = Optional(unicode, MAX_LENGTH)
+    UNIT = Optional(unicode, MAX_LENGTH)
+    SENS_ENDP = Optional(unicode, MAX_LENGTH)
+    ROUTE = Optional(unicode, MAX_LENGTH)
 
 db.generate_mapping(create_tables=True)
 
@@ -153,13 +154,17 @@ def aquatic(substance, path):
         guideline = pick_by_label(data, "Guideline").find(".value").text()
         qualifier = pick_by_label(data, "Qualifier").find(".value").text()
         glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
+        organism = data.find(".ORGANISM").find(".value:first").text()
 
-        print reliability.encode("utf-8")
-        print guideline.encode("utf-8")
-        print qualifier.encode("utf-8")
-        print glp.encode("utf-8")
-        print ""
-
+        aqua_adm = find_or_create(ECHA_ECOTOX_TOX_ADM,
+                                  SUBST_ID=substance,
+                                  TOX_TYPE="AQUA",
+                                  ESR=esr,
+                                  RELIABILITY=reliability,
+                                  GUIDELINE=guideline,
+                                  QUALIFIER=qualifier,
+                                  GLP=glp,
+                                  ORGANISM=organism)
 
 @db_session
 def parse(path):
