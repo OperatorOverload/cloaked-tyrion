@@ -90,10 +90,14 @@ def build_path(base, parts):
                             "__".join([slugify(part) for part in parts]))
 
 def open_file(path):
-    return pq(re.sub(r'xmlns="[^ ]+"', '', open(path).read()))
+    return pq(re.sub(r'xmlns="[^ ]+"', '', open(path).read().encode('utf-8')))
 
 def class_ends(data, end):
     return data.filter(lambda i, this: pq(this).attr("class").endswith(end))
+
+def pick_by_label(data, label):
+    return data.find("div.field").filter(
+        lambda i, this: pq(this).find(".label").text() == label)
 
 @db_session
 def ecotoxicological(substance, path):
@@ -142,11 +146,18 @@ def aquatic(substance, path):
 
     for file in glob.glob(files.replace("thingsthingsthings", "*")):
         d = open_file(file)
+        data = d("#inner")
 
         esr = d("#page_header h2").text()
+        reliability = pick_by_label(data, "Reliability").find(".value").text()
+        guideline = pick_by_label(data, "Guideline").find(".value").text()
+        qualifier = pick_by_label(data, "Qualifier").find(".value").text()
 
+        print reliability
+        print guideline
+        print qualifier
+        print ""
 
-        break
 
 @db_session
 def parse(path):
