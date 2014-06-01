@@ -133,15 +133,29 @@ def ecotoxicological(substance, path):
                            ASS_FAC=ass_fac,
                            EXTR_METH=extr_meth)
 
-            print pnec
+@db_session
+def aquatic(substance, path):
+    files = build_path(path,
+                       ["ecotoxicological information",
+                        "aquatic toxicity",
+                        "thingsthingsthings"])
+
+    print len(glob.glob(files.replace("thingsthingsthings", "*")))
+
+    # for file in glob.glob(files.replace("nnn", "*")):
+    #     pass
 
 @db_session
 def parse(path):
     path = unpack(path)
+    dossier_id = os.path.split(path)[1]
 
-    substance = find_or_create(Substance, DOSSIER_ID=os.path.split(path)[1])
+    substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
+    print "Ecotoxicity for", dossier_id
     ecotoxicological(substance, path)
+    print "Aquatic toxicity for", dossier_id
+    aquatic(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
