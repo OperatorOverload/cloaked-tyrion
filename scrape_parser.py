@@ -104,7 +104,15 @@ def ecotoxicological(substance, path):
         source = d("#toc li").filter(
             lambda i, this: pq(this).children("p").size() == 1 and pq(this).children("p").text() == "Ecotoxicological Information").find(".EndpointSummary:first").text()
 
-        print source
+        for target in d("h4"):
+            target = d(target)
+            section = target.parents(".section")
+
+            compartment = section.find("h3").text()
+            target_text = target.text()
+
+            hac = target.siblings("div").find("div.field").filter(lambda i, this: pq(this).children(".label").text() == "Hazard assessment conclusion").find(".value").text()
+            print ""
 
 @db_session
 def parse(path):
