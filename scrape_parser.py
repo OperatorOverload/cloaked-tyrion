@@ -1,5 +1,5 @@
 
-import os, tarfile, glob
+import os, tarfile, glob, re
 from pony.orm import *
 from slugify import slugify
 from pyquery import PyQuery as pq
@@ -74,6 +74,8 @@ class ECHA_TOX_DNEL(db.Entity):
     SENS_ENDP = Optional(unicode)
     ROUTE = Optional(unicode)
 
+db.generate_mapping(create_tables=True)
+
 def find_or_create(model, **kwargs):
     obj = model.get(**kwargs)
     if obj == None:
@@ -85,7 +87,9 @@ def build_path(base, parts):
     return "%s.html" % os.path.join(base,
                             "__".join([slugify(part) for part in parts]))
 
-db.generate_mapping(create_tables=True)
+def open_file(path):
+    print path
+    return pq(re.sub(r'xmlns=".+"', '', open(path).read()))
 
 @db_session
 def ecotoxicological(substance, path):
@@ -94,9 +98,8 @@ def ecotoxicological(substance, path):
                         "ecotoxicological information NNN"])
 
     for file in glob.glob(files.replace("nnn", "*")):
-        d = pq(filename=file)
-        print d
-    #    print d(".en
+        d = open_file(file)
+        print d("li")
 
 @db_session
 def parse(path):
