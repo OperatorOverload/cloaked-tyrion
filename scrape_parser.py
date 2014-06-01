@@ -122,12 +122,15 @@ def ecotoxicological(substance, path):
             ass_fac = class_ends(data, "_ASS_FAC").find(".value").text()
             extr_meth = class_ends(data, "_EXTR_METH").find(".value").text()
 
-            print hac
-            print value
-            print unit
-            print ass_fac
-            print extr_meth
-            print ""
+            pnec = ECHA_ECOTOX_PNEC(SUBST_ID=substance,
+                                    SOURCE=source,
+                                    COMPARTMENT=compartment,
+                                    TARGET=target_text,
+                                    HAC=hac,
+                                    VALUE=value,
+                                    UNIT=unit,
+                                    ASS_FAC=ass_fac,
+                                    EXTR_METH=extr_meth)
 
 @db_session
 def parse(path):
