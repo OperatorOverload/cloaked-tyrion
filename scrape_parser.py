@@ -140,10 +140,13 @@ def aquatic(substance, path):
                         "aquatic toxicity",
                         "thingsthingsthings"])
 
-    print len(glob.glob(files.replace("thingsthingsthings", "*")))
+    for file in glob.glob(files.replace("thingsthingsthings", "*")):
+        d = open_file(file)
 
-    # for file in glob.glob(files.replace("nnn", "*")):
-    #     pass
+        esr = d("#page_header h2").text()
+
+
+        break
 
 @db_session
 def parse(path):
