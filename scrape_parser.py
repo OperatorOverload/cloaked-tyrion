@@ -1,5 +1,5 @@
 
-import os, tarfile, glob, re
+import os, tarfile, glob, re, codecs
 from pony.orm import *
 from slugify import slugify
 from pyquery import PyQuery as pq
@@ -90,7 +90,7 @@ def build_path(base, parts):
                             "__".join([slugify(part) for part in parts]))
 
 def open_file(path):
-    return pq(re.sub(r'xmlns="[^ ]+"', '', open(path).read().encode('utf-8')))
+    return pq(re.sub(r'xmlns="[^ ]+"', u'', codecs.open(path, encoding="utf-8").read()))
 
 def class_ends(data, end):
     return data.filter(lambda i, this: pq(this).attr("class").endswith(end))
@@ -152,10 +152,12 @@ def aquatic(substance, path):
         reliability = pick_by_label(data, "Reliability").find(".value").text()
         guideline = pick_by_label(data, "Guideline").find(".value").text()
         qualifier = pick_by_label(data, "Qualifier").find(".value").text()
+        glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
 
-        print reliability
-        print guideline
-        print qualifier
+        print reliability.encode("utf-8")
+        print guideline.encode("utf-8")
+        print qualifier.encode("utf-8")
+        print glp.encode("utf-8")
         print ""
 
 
