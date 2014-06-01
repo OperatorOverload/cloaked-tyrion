@@ -92,6 +92,9 @@ def build_path(base, parts):
 def open_file(path):
     return pq(re.sub(r'xmlns="[^ ]+"', '', open(path).read()))
 
+def class_ends(data, end):
+    return data.filter(lambda i, this: pq(this).attr("class").endswith(end))
+
 @db_session
 def ecotoxicological(substance, path):
     files = build_path(path,
@@ -111,7 +114,19 @@ def ecotoxicological(substance, path):
             compartment = section.find("h3").text()
             target_text = target.text()
 
-            hac = target.siblings("div").find("div.field").filter(lambda i, this: pq(this).children(".label").text() == "Hazard assessment conclusion").find(".value").text()
+            data = target.siblings("div").find("div.field")
+
+            hac = class_ends(data, "_NO").find(".value").text()
+            value = class_ends(data, "_VALUE").find(".value span:first").text()
+            unit = class_ends(data, "_VALUE").find(".value span:last").text()
+            ass_fac = class_ends(data, "_ASS_FAC").find(".value").text()
+            extr_meth = class_ends(data, "_EXTR_METH").find(".value").text()
+
+            print hac
+            print value
+            print unit
+            print ass_fac
+            print extr_meth
             print ""
 
 @db_session
