@@ -8,6 +8,8 @@ db = Database('sqlite', 'db.sqlite', create_db=True)
 
 class Substance(db.Entity):
     DOSSIER_ID = PrimaryKey(unicode)
+    CAS = Optional(unicode)
+    EC = Optional(unicode)
     PNECS = Set("ECHA_ECOTOX_PNEC")
     TOXICITIES = Set("ECHA_ECOTOX_TOX_ADM")
     DNELS = Set("ECHA_TOX_DNEL")
@@ -88,8 +90,7 @@ def build_path(base, parts):
                             "__".join([slugify(part) for part in parts]))
 
 def open_file(path):
-    print path
-    return pq(re.sub(r'xmlns=".+"', '', open(path).read()))
+    return pq(re.sub(r'xmlns="[^ ]+"', '', open(path).read()))
 
 @db_session
 def ecotoxicological(substance, path):
@@ -99,7 +100,11 @@ def ecotoxicological(substance, path):
 
     for file in glob.glob(files.replace("nnn", "*")):
         d = open_file(file)
-        print d("li")
+
+        source = d("#toc li").filter(
+            lambda i, this: pq(this).children("p").size() == 1 and pq(this).children("p").text() == "Ecotoxicological Information").find(".EndpointSummary:first").text()
+
+        print source
 
 @db_session
 def parse(path):
