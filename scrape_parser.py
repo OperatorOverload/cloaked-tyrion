@@ -100,6 +100,9 @@ def pick_by_label(data, label):
     return data.find("div.field").filter(
         lambda i, this: pq(this).find(".label").text() == label)
 
+def value_by_select(data, selector):
+    return data.find("%s .value" % selector).text()
+
 @db_session
 def ecotoxicological(substance, path):
     files = build_path(path,
@@ -165,6 +168,22 @@ def aquatic(substance, path):
                                   QUALIFIER=qualifier,
                                   GLP=glp,
                                   ORGANISM=organism)
+
+        references(aqua_adm, data)
+
+@db_session
+def references(aqua_adm, data):
+    for ref in data.find("#GEN_DATA_SOURCE_HD .REFERENCE"):
+        ref = pq(ref)
+
+        reference = find_or_create(
+            ECHA_ECOTOX_TOX_REF,
+            TOX_ID=aqua_adm,
+            REFERENCE_TYPE=value_by_select(ref, ".REFERENCE_TYPE"),
+            REFERENCE_AUTHOR=value_by_select(ref, ".REFERENCE_AUTHOR"),
+            REFERENCE_YEAR=value_by_select(ref, ".REFERENCE_YEAR"),
+            REFERENCE_TITLE=value_by_select(ref, ".REFERENCE_TITLE"),
+            REFERENCE_SOURCE=value_by_select(ref, ".REFERENCE_SOURCE"))
 
 @db_session
 def parse(path):
