@@ -1,5 +1,5 @@
 
-import os, tarfile, glob, re, codecs
+import os, tarfile, glob, re, codecs, shutil
 from pony.orm import *
 from slugify import slugify
 from pyquery import PyQuery as pq
@@ -295,8 +295,13 @@ def unpack(path):
 
     return unpacked
 
+def cleanup(path):
+    shutil.rmtree(path.replace(".tar.gz", ""))
+
+
 if __name__ == "__main__":
 
     for file in os.listdir(os.path.join(os.getcwd(), "data")):
         if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
+            cleanup(os.path.join(os.getcwd(), "data", file))
