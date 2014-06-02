@@ -255,16 +255,17 @@ def dnel(substance, path):
             sens_endp = class_ends(data, "_SENS_ENDP").find(".value").text()
             route = class_ends(data, "_ROUTE").find(".value").text()
 
-            print target
-            print effects
-            print exposure.text()
-            print hac
-            print value, unit.encode("utf-8")
-            print sens_endp
-            print route
-            print ""
-
-
+            toxicological = find_or_create(ECHA_TOX_DNEL,
+                                           SUBST_ID=substance,
+                                           SOURCE=source,
+                                           TARGET=target,
+                                           EFFECTS=effects,
+                                           EXPOSURE=exposure.text(),
+                                           HAC=hac,
+                                           VALUE=value,
+                                           UNIT=unit,
+                                           SENS_ENDP=sens_endp,
+                                           ROUTE=route)
 
 @db_session
 def parse(path):
