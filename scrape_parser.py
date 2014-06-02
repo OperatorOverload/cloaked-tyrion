@@ -274,14 +274,14 @@ def parse(path):
 
     substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
-    # print "Ecotoxicity for", dossier_id
-    # ecotoxicological(substance, path)
-    # print "Aquatic toxicity for", dossier_id
-    # aquatic(substance, path)
-    # print "Terrestrial toxicity for", dossier_id
-    # terrestrial(substance, path)
-    # print "Sediment toxicity for", dossier_id
-    # sediment(substance, path)
+    print "Ecotoxicity for", dossier_id
+    ecotoxicological(substance, path)
+    print "Aquatic toxicity for", dossier_id
+    aquatic(substance, path)
+    print "Terrestrial toxicity for", dossier_id
+    terrestrial(substance, path)
+    print "Sediment toxicity for", dossier_id
+    sediment(substance, path)
     print "Dnels for", dossier_id
     dnel(substance, path)
 
