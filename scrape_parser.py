@@ -1,11 +1,13 @@
 
-import os, tarfile, glob, re, codecs, shutil
+import os, tarfile, glob, re, codecs, shutil, logging
 from pony.orm import *
 from slugify import slugify
 from pyquery import PyQuery as pq
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
 MAX_LENGTH=600
+
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 class Substance(db.Entity):
     DOSSIER_ID = PrimaryKey(unicode)
@@ -191,7 +193,7 @@ def toxicity(files, substance, tox_type):
 
 @db_session
 def references(aqua_adm, data):
-    print "References for", aqua_adm.ESR
+    logging.info("References for %s" % aqua_adm.ESR)
     for ref in data.find("#GEN_DATA_SOURCE_HD .set"):
         ref = pq(ref)
 
@@ -206,7 +208,7 @@ def references(aqua_adm, data):
 
 @db_session
 def datas(aqua_adm, data):
-    print "Datas for", aqua_adm.ESR
+    logging.info("Datas for %s" % aqua_adm.ESR)
     for data in data.find("#GEN_RESULTS_HD .set"):
         data = pq(data)
 
@@ -274,15 +276,15 @@ def parse(path):
 
     substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
-    print "Ecotoxicity for", dossier_id
+    logging.info("Ecotoxicity for %s" % dossier_id)
     ecotoxicological(substance, path)
-    print "Aquatic toxicity for", dossier_id
+    logging.info("Aquatic toxicity for %s" % dossier_id)
     aquatic(substance, path)
-    print "Terrestrial toxicity for", dossier_id
+    logging.info("Terrestrial toxicity for %s" % dossier_id)
     terrestrial(substance, path)
-    print "Sediment toxicity for", dossier_id
+    logging.info("Sediment toxicity for %s" % dossier_id)
     sediment(substance, path)
-    print "Dnels for", dossier_id
+    logging.info("Dnels for %s" % dossier_id)
     dnel(substance, path)
 
 def unpack(path):
