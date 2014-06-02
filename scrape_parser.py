@@ -173,6 +173,7 @@ def aquatic(substance, path):
 
 @db_session
 def references(aqua_adm, data):
+    print "References for", aqua_adm.ESR
     for ref in data.find("#GEN_DATA_SOURCE_HD .REFERENCE"):
         ref = pq(ref)
 
