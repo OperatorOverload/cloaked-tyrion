@@ -307,3 +307,5 @@ if __name__ == "__main__":
         if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
             cleanup(os.path.join(os.getcwd(), "data", file))
+
+    print "Done."
