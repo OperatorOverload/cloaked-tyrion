@@ -231,20 +231,48 @@ def datas(aqua_adm, data):
             REMARKS=value_by_select(data, ".REM"))
 
 @db_session
+def dnel(substance, path):
+    files = build_path(path,
+                       ["toxicological information",
+                        "toxicological information NNN"])
+
+    for file in glob.glob(files.replace("nnn", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        source = d("#page_header h2").text()
+        exposures = data.find("h5").filter(lambda i, this: not pq(this).text().startswith("DN(M)EL"))
+
+        for exposure in exposures:
+            exposure = pq(exposure)
+
+            target = exposure.parents(".section").find("h3").text()
+            effects = exposure.parent().parent().find("h4").text()
+
+            print target
+            print effects
+            print exposure.text()
+            print ""
+
+
+
+@db_session
 def parse(path):
     path = unpack(path)
     dossier_id = os.path.split(path)[1]
 
     substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
-    print "Ecotoxicity for", dossier_id
-    ecotoxicological(substance, path)
-    print "Aquatic toxicity for", dossier_id
-    aquatic(substance, path)
-    print "Terrestrial toxicity for", dossier_id
-    terrestrial(substance, path)
-    print "Sediment toxicity for", dossier_id
-    sediment(substance, path)
+    # print "Ecotoxicity for", dossier_id
+    # ecotoxicological(substance, path)
+    # print "Aquatic toxicity for", dossier_id
+    # aquatic(substance, path)
+    # print "Terrestrial toxicity for", dossier_id
+    # terrestrial(substance, path)
+    # print "Sediment toxicity for", dossier_id
+    # sediment(substance, path)
+    print "Dnels for", dossier_id
+    dnel(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
