@@ -5,7 +5,7 @@ from slugify import slugify
 from pyquery import PyQuery as pq
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
-MAX_LENGTH=350
+MAX_LENGTH=600
 
 class Substance(db.Entity):
     DOSSIER_ID = PrimaryKey(unicode)
@@ -149,19 +149,19 @@ def aquatic(substance, path):
 
     toxicity(files, substance, "AQUATIC")
 
-def terrestrial(substance, path)
+def terrestrial(substance, path):
     files = build_path(path,
                        ["ecotoxicological information",
                         "terrestrial toxicity",
                         "thingsthingsthings"])
-    toxicity(file, substance, "TERRESTRIAL")
+    toxicity(files, substance, "TERRESTRIAL")
 
 def sediment(substance, path):
     files = build_path(path,
                        ["ecotoxicological information",
                         "sediment toxicity",
                         "thingsthingsthings"])
-    toxicity(file, substance, "SEDIMENT")
+    toxicity(files, substance, "SEDIMENT")
 
 @db_session
 def toxicity(files, substance, tox_type):
