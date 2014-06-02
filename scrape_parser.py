@@ -38,7 +38,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     GUIDELINE = Optional(unicode, MAX_LENGTH)
     QUALIFIER = Optional(unicode, MAX_LENGTH)
     GLP = Optional(unicode, MAX_LENGTH)
-    ORGANISM = Optional(unicode, MAX_LENGTH)
+    ORGANISM = Optional(unicode, MAX_LENGTH*3)
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
 
@@ -54,7 +54,7 @@ class ECHA_ECOTOX_TOX_REF(db.Entity):
 class ECHA_ECOTOX_TOX_DATA(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
     TOX_DATA_ID = PrimaryKey(int, auto=True)
-    ORGANISM = Optional(unicode, MAX_LENGTH)
+    ORGANISM = Optional(unicode, MAX_LENGTH*3)
     EXP_DURATION_VALUE = Optional(unicode, MAX_LENGTH)
     EXP_DURATION_UNIT = Optional(unicode, MAX_LENGTH)
     ENDPOINT = Optional(unicode, MAX_LENGTH)
