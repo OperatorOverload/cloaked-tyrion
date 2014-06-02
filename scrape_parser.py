@@ -30,7 +30,7 @@ class ECHA_ECOTOX_PNEC(db.Entity):
 class ECHA_ECOTOX_TOX_ADM(db.Entity):
     SUBST_ID = Required(Substance)
     TOX_ID = PrimaryKey(int, auto=True)
-    TOX_TYPE = Required(unicode) # AQUA, TERRESTRIAL, SEDIMENT
+    TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
     ESR = Optional(unicode, MAX_LENGTH)
     RELIABILITY = Optional(unicode, MAX_LENGTH)
     GUIDELINE = Optional(unicode, MAX_LENGTH)
@@ -141,13 +141,30 @@ def ecotoxicological(substance, path):
                            ASS_FAC=ass_fac,
                            EXTR_METH=extr_meth)
 
-@db_session
 def aquatic(substance, path):
     files = build_path(path,
                        ["ecotoxicological information",
                         "aquatic toxicity",
                         "thingsthingsthings"])
 
+    toxicity(files, substance, "AQUATIC")
+
+def terrestrial(substance, path)
+    files = build_path(path,
+                       ["ecotoxicological information",
+                        "terrestrial toxicity",
+                        "thingsthingsthings"])
+    toxicity(file, substance, "TERRESTRIAL")
+
+def sediment(substance, path):
+    files = build_path(path,
+                       ["ecotoxicological information",
+                        "sediment toxicity",
+                        "thingsthingsthings"])
+    toxicity(file, substance, "SEDIMENT")
+
+@db_session
+def toxicity(files, substance, tox_type):
     for file in glob.glob(files.replace("thingsthingsthings", "*")):
         d = open_file(file)
         data = d("#inner")
@@ -161,7 +178,7 @@ def aquatic(substance, path):
 
         aqua_adm = find_or_create(ECHA_ECOTOX_TOX_ADM,
                                   SUBST_ID=substance,
-                                  TOX_TYPE="AQUA",
+                                  TOX_TYPE=tox_type,
                                   ESR=esr,
                                   RELIABILITY=reliability,
                                   GUIDELINE=guideline,
@@ -224,6 +241,10 @@ def parse(path):
     ecotoxicological(substance, path)
     print "Aquatic toxicity for", dossier_id
     aquatic(substance, path)
+    print "Terrestrial toxicity for", dossier_id
+    terrestrial(substance, path)
+    print "Sediment toxicity for", dossier_id
+    sediment(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
