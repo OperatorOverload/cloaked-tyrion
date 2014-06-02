@@ -58,7 +58,7 @@ class ECHA_ECOTOX_TOX_DATA(db.Entity):
     ENDPOINT = Optional(unicode, MAX_LENGTH)
     EFF_CONC = Optional(unicode, MAX_LENGTH)
     EFF_CONC_UNIT = Optional(unicode, MAX_LENGTH)
-    BASIC_CONC = Optional(unicode, MAX_LENGTH)
+    BASIS_CONC = Optional(unicode, MAX_LENGTH)
     EFF_CONC_TYPE = Optional(unicode, MAX_LENGTH)
     BASIS_EFFECT = Optional(unicode, MAX_LENGTH)
     REMARKS = Optional(unicode, MAX_LENGTH)
@@ -170,11 +170,12 @@ def aquatic(substance, path):
                                   ORGANISM=organism)
 
         references(aqua_adm, data)
+        datas(aqua_adm, data)
 
 @db_session
 def references(aqua_adm, data):
     print "References for", aqua_adm.ESR
-    for ref in data.find("#GEN_DATA_SOURCE_HD .REFERENCE"):
+    for ref in data.find("#GEN_DATA_SOURCE_HD .set"):
         ref = pq(ref)
 
         reference = find_or_create(
@@ -185,6 +186,32 @@ def references(aqua_adm, data):
             REFERENCE_YEAR=value_by_select(ref, ".REFERENCE_YEAR"),
             REFERENCE_TITLE=value_by_select(ref, ".REFERENCE_TITLE"),
             REFERENCE_SOURCE=value_by_select(ref, ".REFERENCE_SOURCE"))
+
+@db_session
+def datas(aqua_adm, data):
+    print "Datas for", aqua_adm.ESR
+    for data in data.find("#GEN_RESULTS_HD .set"):
+        data = pq(data)
+
+        duration_value = data.find(".EXP_DURATION_VALUE .value span:first").text()
+        duration_unit = data.find(".EXP_DURATION_VALUE .value span:last").text()
+
+        eff_conc = data.find(".LOQUALIFIER .value span:first").text()
+        eff_conc_unit = data.find(".LOQUALIFIER .value span:last").text()
+
+        datum = find_or_create(
+            ECHA_ECOTOX_TOX_DATA,
+            TOX_ID=aqua_adm,
+            ORGANISM=value_by_select(data, ".ORGANISM"),
+            EXP_DURATION_VALUE=duration_value,
+            EXP_DURATION_UNIT=duration_unit,
+            ENDPOINT=value_by_select(data, ".ENDPOINT"),
+            EFF_CONC=eff_conc,
+            EFF_CONC_UNIT=eff_conc_unit,
+            BASIS_CONC=value_by_select(data, ".BASIS_CONC"),
+            EFF_CONC_TYPE=value_by_select(data, ".EFF_CONC_TYPE"),
+            BASIS_EFFECT=value_by_select(data, ".BASIS_EFFECT"),
+            REMARKS=value_by_select(data, ".REM"))
 
 @db_session
 def parse(path):
