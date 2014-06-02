@@ -5,7 +5,7 @@ from slugify import slugify
 from pyquery import PyQuery as pq
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
-MAX_LENGTH=600
+MAX_LENGTH=6000
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
