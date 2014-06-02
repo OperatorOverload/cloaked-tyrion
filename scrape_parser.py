@@ -245,13 +245,23 @@ def dnel(substance, path):
 
         for exposure in exposures:
             exposure = pq(exposure)
+            data = exposure.parent().find("div.field")
 
             target = exposure.parents(".section").find("h3").text()
             effects = exposure.parent().parent().find("h4").text()
+            hac = class_ends(data, "_DNMEL").find(".value").text()
+            value = class_ends(data, "_DNMEL_VALUE").find(".value span:first").text()
+            unit = class_ends(data, "_DNMEL_VALUE").find(".value span:last").text()
+            sens_endp = class_ends(data, "_SENS_ENDP").find(".value").text()
+            route = class_ends(data, "_ROUTE").find(".value").text()
 
             print target
             print effects
             print exposure.text()
+            print hac
+            print value, unit.encode("utf-8")
+            print sens_endp
+            print route
             print ""
 
 
