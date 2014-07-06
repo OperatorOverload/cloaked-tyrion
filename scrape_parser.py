@@ -25,7 +25,6 @@ class ECHA_ECOTOX_PNEC(db.Entity):
     TARGET = Optional(unicode, MAX_LENGTH)
     HAC = Optional(unicode, MAX_LENGTH)
     VALUE = Optional(unicode, MAX_LENGTH)
-    UNIT = Optional(unicode, MAX_LENGTH)
     ASS_FAC = Optional(unicode, MAX_LENGTH)
     EXTR_METH = Optional(unicode, MAX_LENGTH)
 
@@ -56,7 +55,6 @@ class ECHA_ECOTOX_TOX_DATA(db.Entity):
     TOX_DATA_ID = PrimaryKey(int, auto=True)
     ORGANISM = Optional(unicode, MAX_LENGTH*3)
     EXP_DURATION_VALUE = Optional(unicode, MAX_LENGTH)
-    EXP_DURATION_UNIT = Optional(unicode, MAX_LENGTH)
     ENDPOINT = Optional(unicode, MAX_LENGTH)
     EFF_CONC = Optional(unicode, MAX_LENGTH)
     EFF_CONC_UNIT = Optional(unicode, MAX_LENGTH)
@@ -75,7 +73,6 @@ class ECHA_TOX_DNEL(db.Entity):
     EXPOSURE = Optional(unicode, MAX_LENGTH)
     HAC = Optional(unicode, MAX_LENGTH)
     VALUE = Optional(unicode, MAX_LENGTH)
-    UNIT = Optional(unicode, MAX_LENGTH)
     SENS_ENDP = Optional(unicode, MAX_LENGTH)
     ROUTE = Optional(unicode, MAX_LENGTH)
 
@@ -127,8 +124,7 @@ def ecotoxicological(substance, path):
             data = target.siblings("div").find("div.field")
 
             hac = class_ends(data, "_NO").find(".value").text()
-            value = class_ends(data, "_VALUE").find(".value span:first").text()
-            unit = class_ends(data, "_VALUE").find(".value span:last").text()
+            value = class_ends(data, "_VALUE").find(".value").html()
             ass_fac = class_ends(data, "_ASS_FAC").find(".value").text()
             extr_meth = class_ends(data, "_EXTR_METH").find(".value").text()
 
@@ -139,7 +135,6 @@ def ecotoxicological(substance, path):
                            TARGET=target_text,
                            HAC=hac,
                            VALUE=value,
-                           UNIT=unit,
                            ASS_FAC=ass_fac,
                            EXTR_METH=extr_meth)
 
@@ -212,21 +207,17 @@ def datas(aqua_adm, data):
     for data in data.find("#GEN_RESULTS_HD .set"):
         data = pq(data)
 
-        duration_value = data.find(".EXP_DURATION_VALUE .value span:first").text()
-        duration_unit = data.find(".EXP_DURATION_VALUE .value span:last").text()
+        duration_value = data.find(".EXP_DURATION_VALUE").html()
 
-        eff_conc = data.find(".LOQUALIFIER .value span:first").text()
-        eff_conc_unit = data.find(".LOQUALIFIER .value span:last").text()
+        eff_conc = data.find(".LOQUALIFIER .value").html()
 
         datum = find_or_create(
             ECHA_ECOTOX_TOX_DATA,
             TOX_ID=aqua_adm,
             ORGANISM=value_by_select(data, ".ORGANISM"),
             EXP_DURATION_VALUE=duration_value,
-            EXP_DURATION_UNIT=duration_unit,
             ENDPOINT=value_by_select(data, ".ENDPOINT"),
             EFF_CONC=eff_conc,
-            EFF_CONC_UNIT=eff_conc_unit,
             BASIS_CONC=value_by_select(data, ".BASIS_CONC"),
             EFF_CONC_TYPE=value_by_select(data, ".EFF_CONC_TYPE"),
             BASIS_EFFECT=value_by_select(data, ".BASIS_EFFECT"),
@@ -253,7 +244,6 @@ def dnel(substance, path):
             effects = exposure.parent().parent().find("h4").text()
             hac = class_ends(data, "_DNMEL").find(".value").text()
             value = class_ends(data, "_DNMEL_VALUE").find(".value span:first").text()
-            unit = class_ends(data, "_DNMEL_VALUE").find(".value span:last").text()
             sens_endp = class_ends(data, "_SENS_ENDP").find(".value").text()
             route = class_ends(data, "_ROUTE").find(".value").text()
 
@@ -265,7 +255,6 @@ def dnel(substance, path):
                                            EXPOSURE=exposure.text(),
                                            HAC=hac,
                                            VALUE=value,
-                                           UNIT=unit,
                                            SENS_ENDP=sens_endp,
                                            ROUTE=route)
 
