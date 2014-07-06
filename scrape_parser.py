@@ -38,6 +38,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     QUALIFIER = Optional(unicode, MAX_LENGTH)
     GLP = Optional(unicode, MAX_LENGTH)
     ORGANISM = Optional(unicode, MAX_LENGTH*3)
+    TESTMAT_INDICATOR = Optional(unicode, MAX_LENGTH)
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
 
@@ -57,7 +58,6 @@ class ECHA_ECOTOX_TOX_DATA(db.Entity):
     EXP_DURATION_VALUE = Optional(unicode, MAX_LENGTH)
     ENDPOINT = Optional(unicode, MAX_LENGTH)
     EFF_CONC = Optional(unicode, MAX_LENGTH)
-    EFF_CONC_UNIT = Optional(unicode, MAX_LENGTH)
     BASIS_CONC = Optional(unicode, MAX_LENGTH)
     EFF_CONC_TYPE = Optional(unicode, MAX_LENGTH)
     BASIS_EFFECT = Optional(unicode, MAX_LENGTH)
@@ -124,7 +124,7 @@ def ecotoxicological(substance, path):
             data = target.siblings("div").find("div.field")
 
             hac = class_ends(data, "_NO").find(".value").text()
-            value = class_ends(data, "_VALUE").find(".value").html()
+            value = class_ends(data, "_VALUE").find(".value").html() or ""
             ass_fac = class_ends(data, "_ASS_FAC").find(".value").text()
             extr_meth = class_ends(data, "_EXTR_METH").find(".value").text()
 
@@ -172,6 +172,7 @@ def toxicity(files, substance, tox_type):
         qualifier = pick_by_label(data, "Qualifier").find(".value").text()
         glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
         organism = data.find(".ORGANISM").find(".value:first").text()
+        testmat = data.find(".TESTMAT_INDICATOR").find(".value").text()
 
         aqua_adm = find_or_create(ECHA_ECOTOX_TOX_ADM,
                                   SUBST_ID=substance,
@@ -181,7 +182,8 @@ def toxicity(files, substance, tox_type):
                                   GUIDELINE=guideline,
                                   QUALIFIER=qualifier,
                                   GLP=glp,
-                                  ORGANISM=organism)
+                                  ORGANISM=organism,
+                                  TESTMAT_INDICATOR=testmat)
 
         references(aqua_adm, data)
         datas(aqua_adm, data)
@@ -207,9 +209,9 @@ def datas(aqua_adm, data):
     for data in data.find("#GEN_RESULTS_HD .set"):
         data = pq(data)
 
-        duration_value = data.find(".EXP_DURATION_VALUE").html()
+        duration_value = data.find(".EXP_DURATION_VALUE").html() or ""
 
-        eff_conc = data.find(".LOQUALIFIER .value").html()
+        eff_conc = data.find(".LOQUALIFIER .value").html() or ""
 
         datum = find_or_create(
             ECHA_ECOTOX_TOX_DATA,
