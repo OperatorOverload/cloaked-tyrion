@@ -169,6 +169,11 @@ def dnel(substance, path):
                                            ROUTE=route)
 
 @db_session
+def toxicokinetics(substance, path):
+    pass
+
+
+@db_session
 def parse(path):
     path = unpack(path)
     dossier_id = os.path.split(path)[1]
@@ -177,14 +182,21 @@ def parse(path):
 
     logging.info("Ecotoxicity for %s" % dossier_id)
     ecotoxicological(substance, path)
+
     logging.info("Aquatic toxicity for %s" % dossier_id)
     aquatic(substance, path)
+
     logging.info("Terrestrial toxicity for %s" % dossier_id)
     terrestrial(substance, path)
+
     logging.info("Sediment toxicity for %s" % dossier_id)
     sediment(substance, path)
+
     logging.info("Dnels for %s" % dossier_id)
     dnel(substance, path)
+
+    logging.info("Toxicokinetics for %s" % dossier_id)
+    toxicokinetics(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
