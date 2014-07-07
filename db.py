@@ -15,6 +15,10 @@ def make_model(fields):
 
     return inner
 
+def make_ref():
+    return make_model(["reference_type", "reference_author", "reference_year",
+                       "reference_title", "reference_source"])
+
 
 class Substance(db.Entity):
     DOSSIER_ID = PrimaryKey(unicode)
@@ -25,6 +29,7 @@ class Substance(db.Entity):
     DNELS = Set("ECHA_TOX_DNEL")
     TOXIKINETICSES = Set("ECHA_TOX_BTK_ADM")
     DERMALS = Set("ECHA_TOX_DA_ADM")
+    ACUTES = Set("ECHA_TOX_ACUTE_ADM")
 
 
 class ECHA_ECOTOX_PNEC(db.Entity):
@@ -104,8 +109,7 @@ class ECHA_TOX_BTK_GUIDELINES(db.Entity):
     TOX_BTK_GL_ID = PrimaryKey(int, auto=True)
 
 class ECHA_TOX_BTK_REF(db.Entity):
-    __metaclass__ = make_model(["reference_author", "reference_year", "reference_title",
-                                "reference_source"])
+    __metaclass__ = make_ref()
 
     TOX_BTK_ID = Required(ECHA_TOX_BTK_ADM)
     TOX_BTK_REF_ID = PrimaryKey(int, auto=True)
@@ -136,8 +140,7 @@ class ECHA_TOX_DA_GUIDELINES(db.Entity):
     TOX_DA_GL_ID = PrimaryKey(int, auto=True)
 
 class ECHA_TOX_DA_REF(db.Entity):
-    __metaclass__ = make_model(["reference_type", "reference_author", "reference_year",
-                                "reference_title", "reference_source"])
+    __metaclass__ = make_ref()
 
     TOX_DA_ID = Required(ECHA_TOX_DA_ADM)
     TOX_DA_REF_ID = PrimaryKey(int, auto=True)
@@ -147,6 +150,37 @@ class ECHA_TOX_DA_DATA(db.Entity):
 
     TOX_DA_ID = Required(ECHA_TOX_DA_ADM)
     TOX_DA_DATA_ID = PrimaryKey(int, auto=True)
+
+class ECHA_TOX_ACUTE_ADM(db.Entity):
+    __metaclass__ = make_model(["esr", "reliability", "test_type", "glp",
+                                "testmat_indicator", "organism", "sex", "route",
+                                "vehicle_tox", "exp_period_txt",
+                                "interpret_rs_submitter"])
+
+    SUBST_ID = Required(Substance)
+    TOX_ACUTE_ID = PrimaryKey(int, auto=True)
+    GUIDELINES = Set("ECHA_TOX_ACUTE_GUIDELINES")
+    REFS = Set("ECHA_TOX_ACUTE_REF")
+    DATAS = Set("ECHA_TOX_ACUTE_DATA")
+
+class ECHA_TOX_ACUTE_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(["guideline", "qualifier"])
+
+    TOX_ACUTE_ID = Required(ECHA_TOX_ACUTE_ADM)
+    TOX_ACUTE_GL_ID = PrimaryKey(int, auto=True)
+
+class ECHA_TOX_ACUTE_REF(db.Entity):
+    __metaclass__ = make_ref()
+
+    TOX_ACUTE_ID = Required(ECHA_TOX_ACUTE_ADM)
+    TOX_ACUTE_REF_ID = PrimaryKey(int, auto=True)
+
+class ECHA_TOX_ACUTE_DATA(db.Entity):
+    __metaclass__ = make_model(["sex", "endpoint", "loqualifier", "exp_period_value",
+                                "conf_limits_loqualifier", "remarks"])
+
+    TOX_ACUTE_ID = Required(ECHA_TOX_ACUTE_ADM)
+    TOX_ACUTE_DATA_ID = PrimaryKey(int, auto=True)
 
 
 db.generate_mapping(create_tables=True)
