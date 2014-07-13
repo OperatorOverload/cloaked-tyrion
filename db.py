@@ -36,7 +36,9 @@ class Substance(db.Entity):
     DERMALS = Set("ECHA_TOX_DA_ADM")
     ACUTES = Set("ECHA_TOX_ACUTE_ADM")
     ICS = Set("ECHA_TOX_IC_ADM")
-    #SENSS = Set("ECHA_TOX_SENS_ADM")
+    SENSS = Set("ECHA_TOX_SENS_ADM")
+    RDTS = Set("ECHA_TOX_RDT_ADM")
+    CRMS = Set("ECHA_TOX_CRM_ADM")
 
 
 class ECHA_ECOTOX_PNEC(db.Entity):
@@ -189,13 +191,88 @@ class ECHA_TOX_IC_DATA(db.Entity):
                                ["parameter", "basis", "timepoint", "score_loqualifier",
                                 "scale", "reversibility", "remarks"])
 
-# class ECHA_TOX_SENS_ADM(db.Entity):
-#     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_SENS_ID",
-#                                [])
+class ECHA_TOX_SENS_ADM(db.Entity):
+    __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_SENS_ID",
+                               ["esr", "reliability", "type_invivo_invitro", "glp",
+                                "testmat_indicator", "organism", "sex", "exp_period",
+                                "observ_period", "route_induction", "route_challenge",
+                                "vehicle_tox", "doses_concentrations",
+                                "interpret_rs_submitter", "criteria_submitter",
+                                "response_data"])
 
-#     GUIDELINES = Set("ECHA_TOX_SENS_GUIDELINE")
-#     REFS = Set("ECHA_TOX_SENS_REF")
-#     DATAS = Set("ECHA_TOX_SENS_DATA")
+    GUIDELINES = Set("ECHA_TOX_SENS_GUIDELINES")
+    REFS = Set("ECHA_TOX_SENS_REF")
+    DATAS = Set("ECHA_TOX_SENS_DATA")
+
+class ECHA_TOX_SENS_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_GL_ID",
+                               ["guideline", "qualifier"])
+
+class ECHA_TOX_SENS_REF(db.Entity):
+    __metaclass__ = make_ref(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_REF_ID")
+
+class ECHA_TOX_SENS_DATA(db.Entity):
+    __metaclass__ = make_model(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_DATA_ID",
+                               ["reading", "timepoint", "group", "number_positive",
+                                "number_total", "remarks"])
+
+class ECHA_TOX_RDT_ADM(db.Entity):
+    __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_RDT_ID",
+                               ["esr", "reliability", "testtype_tox", "glp",
+                                "testmat_indicator", "organism", "sex", "exp_period",
+                                "frequency", "route", "vehicle_tox"])
+
+    GUIDELINES = Set("ECHA_TOX_RDT_GUIDELINES")
+    REFS = Set("ECHA_TOX_RDT_REF")
+    DATAS = Set("ECHA_TOX_RDT_DATA")
+
+class ECHA_TOX_RDT_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(("TOX_RDT_ID", ECHA_TOX_RDT_ADM), "TOX_RDT_GL_ID",
+                               ["guideline", "qualifier"])
+
+class ECHA_TOX_RDT_REF(db.Entity):
+    __metaclass__ = make_ref(("TOX_RDT_ID", ECHA_TOX_RDT_ADM), "TOX_RDT_REF_ID")
+
+class ECHA_TOX_RDT_DATA(db.Entity):
+    __metaclass__ = make_model(("TOX_RDT_ID", ECHA_TOX_RDT_ADM), "TOX_RDT_DATA_ID",
+                               ["endpoint", "loqualifier", "sex", "eff_conc_type",
+                                "remarks"])
+
+
+class ECHA_TOX_CRM_ADM(db.Entity):
+    __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_CRM_ID",
+                               ["esr", "reliability", "genotoxicity_type",
+                                "studytype", "testtype_tox", "glp", "testmat_indicator",
+                                "organism", "sex", "route", "vehicle_tox", "exp_period",
+                                "frequency", "test_period", "interpret_rs_submitter",
+                                "rs_maternal_tox", "rs_embryotox_tera"])
+
+    GUIDELINES = Set("ECHA_TOX_CRM_GUIDELINES")
+    REFS = Set("ECHA_TOX_CRM_REF")
+    MUTA_DATAS = Set("ECHA_TOX_CRM_MUTA_DATA")
+    CARC_DATAS = Set("ECHA_TOX_CRM_CARC_DATA")
+    REPR_DATAS = Set("ECHA_TOX_CRM_REPR_DATA")
+
+class ECHA_TOX_CRM_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_GL_ID",
+                               ["guideline", "qualifier"])
+
+class ECHA_TOX_CRM_REF(db.Entity):
+    __metaclass__ = make_ref(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REF_ID")
+
+class ECHA_TOX_CRM_MUTA_DATA(db.Entity):
+    __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_MUTA_DATA_ID",
+                               ["organism", "met_act_indicator", "testsystem", "sex",
+                                "genotoxicity", "toxicity", "cytotoxicity",
+                                "veh_contr_valid", "neg_contr_valid", "post_contr_valid"])
+
+class ECHA_TOX_CRM_CARC_DATA(db.Entity):
+    __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_CARD_DATA_ID",
+                               ["endpoint", "effecttype", "loqualifier", "sex"])
+
+class ECHA_TOX_CRM_REPR_DATA(db.Entity):
+    __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REPR_DATA_ID",
+                               ["endpoint", "generation", "loqualifier", "sex"])
 
 
 db.generate_mapping(create_tables=True)
