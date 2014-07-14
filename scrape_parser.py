@@ -170,8 +170,26 @@ def dnel(substance, path):
 
 @db_session
 def toxicokinetics(substance, path):
-    pass
+    files = build_path(path,
+                       ["toxicological information",
+                        "toxicokinetics metabolism and distribution",
+                        "basic toxicokinetics",
+                        "SSS"])
 
+    for file in glob.glob(files.replace("sss", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        kwargs = dict(
+            subst_id = substance,
+            esr = d("#page_header h2").text(),
+            reliability = value_by_select(data, ".reliability"),
+            type_invivo_invitro = value_by_select(data, ".TYPE_INVIVO_INVITRO"),
+            study_objective = value_by_select(data, ".STUDY_OBJECTIVE"),
+            glp = value_by_select(data, ".GLP_COMPLIANCE_STATEMENT"),
+            testmat_indicator = value_by_select(data, ".TESTMAT_INDICATOR"))
+
+        basic = find_or_create(ECHA_TOX_BTK_ADM, **fieldify(kwargs))
 
 @db_session
 def parse(path):
@@ -180,20 +198,20 @@ def parse(path):
 
     substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
-    logging.info("Ecotoxicity for %s" % dossier_id)
-    ecotoxicological(substance, path)
+    # logging.info("Ecotoxicity for %s" % dossier_id)
+    # ecotoxicological(substance, path)
 
-    logging.info("Aquatic toxicity for %s" % dossier_id)
-    aquatic(substance, path)
+    # logging.info("Aquatic toxicity for %s" % dossier_id)
+    # aquatic(substance, path)
 
-    logging.info("Terrestrial toxicity for %s" % dossier_id)
-    terrestrial(substance, path)
+    # logging.info("Terrestrial toxicity for %s" % dossier_id)
+    # terrestrial(substance, path)
 
-    logging.info("Sediment toxicity for %s" % dossier_id)
-    sediment(substance, path)
+    # logging.info("Sediment toxicity for %s" % dossier_id)
+    # sediment(substance, path)
 
-    logging.info("Dnels for %s" % dossier_id)
-    dnel(substance, path)
+    # logging.info("Dnels for %s" % dossier_id)
+    # dnel(substance, path)
 
     logging.info("Toxicokinetics for %s" % dossier_id)
     toxicokinetics(substance, path)

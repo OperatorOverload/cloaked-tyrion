@@ -20,3 +20,9 @@ def pick_by_label(data, label):
 
 def value_by_select(data, selector):
     return data.find("%s .value" % selector).text()
+
+def html_value_by_select(data, selector):
+    return data.find("%s .value" % selector).html() or ""
+
+def fieldify(kwargs):
+    return dict((k.upper(), v) for k, v in kwargs.iteritems())
