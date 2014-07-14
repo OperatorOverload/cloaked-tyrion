@@ -39,6 +39,7 @@ class Substance(db.Entity):
     SENSS = Set("ECHA_TOX_SENS_ADM")
     RDTS = Set("ECHA_TOX_RDT_ADM")
     CRMS = Set("ECHA_TOX_CRM_ADM")
+    PHYSCHEMS = Set("ECHA_PHYSCHEM_ADM")
 
 
 class ECHA_ECOTOX_PNEC(db.Entity):
@@ -273,6 +274,124 @@ class ECHA_TOX_CRM_CARC_DATA(db.Entity):
 class ECHA_TOX_CRM_REPR_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REPR_DATA_ID",
                                ["endpoint", "generation", "loqualifier", "sex"])
+
+
+class ECHA_PHYSCHEM_ADM(db.Entity):
+    __metaclass__ = make_model(("SUBST_ID", Substance), "PHYSCHEM_ID",
+                               ["esr", "reliability", "method_type", "partcoeff_type",
+                                "testtype", "glp", "testmat_indicator",
+                                "interpretation_results", "org_solvents_stability",
+                                "org_solvents_degrad", "disocciation_indicator",
+                                "distribution_type"])
+
+    GUIDELINES = Set("ECHA_PHYSCHEM_GUIDELINES")
+    REFS = Set("ECHA_PHYSCHEM_REF")
+    APPEARANCES = Set("ECHA_PHYSCHEM_APPEARANCE")
+    MELTINGS = Set("ECHA_PHYSCHEM_MELTING")
+    BOILINGS = Set("ECHA_PHYSCHEM_BOILING")
+    DENSITIES = Set("ECHA_PHYSCHEM_DENSITY")
+    VPRESSURES = Set("ECHA_PHYSCHEM_VPRESSURE")
+    PARTCS = Set("ECHA_PHYSCHEM_PARTC")
+    WSOLBS = Set("ECHA_PHYSCHEM_WSOLUBILITY")
+    STENSIONS = Set("ECHA_PHYSCHEM_STENSION")
+    FPOINTS = Set("ECHA_PHYSCHEM_FPOINT")
+    AUTOFLAMS = Set("ECHA_PHYSCHEM_AUTOFLAM")
+    FLAMS = Set("ECHA_PHYSCHEM_FLAMMABILITY")
+    OXIDIZINGS = Set("ECHA_PHYSCHEM_OXIDIZING_PROP")
+    SOLDEGRADS = Set("ECHA_PHYSCHEM_ORG_SOL_DEGRADATION")
+    DISSCOS = Set("ECHA_PHYSCHEM_DISSCO")
+    PHS = Set("ECHA_PHYSCHEM_PH")
+    VISCOSITIES = Set("ECHA_PHYSCHEM_VISCOSITY")
+    MMDS = Set("ECHA_PHYSCHEM_GRANULOMETRY_MMD")
+    PSS = Set("ECHA_PHYSCHEM_GRANULOMETRY_PS")
+    DISTS = Set("ECHA_PHYSCHEM_GRANULOMETRY_DIST")
+
+class ECHA_PHYSCHEM_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GL_ID",
+                               ["guideline", "qualifier"])
+
+class ECHA_PHYSCHEM_REF(db.Entity):
+    __metaclass__ = make_ref(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_REF_ID")
+
+class ECHA_PHYSCHEM_APPEARANCE(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_APP_ID",
+                               ["form", "colour", "odour", "type"])
+
+class ECHA_PHYSCHEM_MELTING(db.Entity):
+    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_MELT_ID",
+                               ["loqualifier", "pressure", "decomp_indicator",
+                                "sublimation_indicator"])
+
+class ECHA_PHYSCHEM_BOILING(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_BOILING_ID",
+                               ["loqualifier", "pressure", "decomp_indicator",
+                                "sublimation_indicator"])
+
+class ECHA_PHYSCHEM_DENSITY(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_DENSITY_ID",
+                               ["type", "loqualifier", "temp_value"])
+
+class ECHA_PHYSCHEM_VPRESSURE(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_VP_ID",
+                               ["loqualifier", "temp_value"])
+
+class ECHA_PHYSCHEM_PARTC(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_PARTC_ID",
+                               ["type", "loqualifier", "temp_value", "ph_loqualifier"])
+
+class ECHA_PHYSCHEM_WSOLUBILITY(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_WS_ID",
+                               ["temp_value", "ph_loqualifier"])
+
+class ECHA_PHYSCHEM_STENSION(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_ST_ID",
+                               ["loqualifier", "temp_value", "conc_value"])
+
+class ECHA_PHYSCHEM_FPOINT(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_FPOINT_ID",
+                               ["loqualifier", "press_loqualifier"])
+
+class ECHA_PHYSCHEM_AUTOFLAM(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_AF_ID",
+                               ["loqualifier", "press_loqualifier"])
+
+class ECHA_PHYSCHEM_FLAMMABILITY(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_FLAMM_ID",
+                               ["pyrophoric_properties", "loexplos_limit",
+                                "upexplos_limit", "interpret_results_subm"])
+
+class ECHA_PHYSCHEM_OXIDIZING_PROP(db.Entity):
+    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OXI_ID",
+                               ["parameter", "loqualifier", "remarks"])
+
+class ECHA_PHYSCHEM_ORG_SOL_DEGRADATION(db.Entity):
+    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OSD_ID",
+                               ["no", "identifier", "identify"])
+
+class ECHA_PHYSCHEM_DISSCO(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_DISSCO_ID",
+                               ["no", "value_loqualifier", "temp_value", "remarks"])
+
+class ECHA_PHYSCHEM_PH(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_PH_ID",
+                               ["loqualifier", "temp_value", "conc_loqualifier",
+                                "remarks"])
+
+class ECHA_PHYSCHEM_VISCOSITY(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_VISCO_ID",
+                               ["loqualifier", "temp_value", "remarks"])
+
+class ECHA_PHYSCHEM_GRANULOMETRY_MMD(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GMT_MMD_ID",
+                               ["loqualifier", "remarks"])
+
+class ECHA_PHYSCHEM_GRANULOMETRY_PS(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GMT_PS_ID",
+                               ["percentile", "loqualifier", "remarks"])
+
+class ECHA_PHYSCHEM_GRANULOMETRY_DIST(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GMT_DIST_ID",
+                               ["size_loqualifier", "dist_loqualifier", "remarks"])
 
 
 db.generate_mapping(create_tables=True)
