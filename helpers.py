@@ -28,21 +28,20 @@ def html_value_by_select(data, selector):
 def fieldify(kwargs):
     return dict((k.upper(), v) for k, v in kwargs.iteritems())
 
-def save_data(data, table, parent, fields):
-    parent_field, parent_table = parent
-
+def save_data(data, table, known_data, fields):
     models = []
+    known_data = [known_data] if type(known_data) == tuple else known_data
 
     for d in data:
         d = pq(d)
 
-        kwargs = dict((field, value_by_select(d, selector))
-                      for field, selector in fields)
+        kwargs = [(field, value_by_select(d, selector))
+                  for field, selector in fields]
 
-        if all(True if len(v.strip()) <= 0 else False for k, v in kwargs.iteritems()):
+        if all(True if len(v.strip()) <= 0 else False for k, v in kwargs):
             continue
 
-        kwargs[parent_field] = parent_table
+        kwargs = dict(kwargs + known_data)
 
         models.append(find_or_create(table, **fieldify(kwargs)))
 

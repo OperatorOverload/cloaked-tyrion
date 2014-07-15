@@ -172,7 +172,8 @@ def dnel(substance, path):
 def toxicokinetics(substance, path):
     import toxicokinetics as tox
 
-    tox.basic(substance, path)
+    #tox.basic(substance, path)
+    tox.dermal(substance, path)
 
 @db_session
 def parse(path):

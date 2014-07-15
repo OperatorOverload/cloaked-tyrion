@@ -51,3 +51,51 @@ def basic(substance, path):
                    ("doses_concentrations", ".DOSES_CONCENTRATIONS"),
                    ("metabolites", ".METABOLITES"),
                    ("interpret_rs_submitter", ".INTERPRET_RS_SUBMITTER")])
+
+def dermal(substance, path):
+    files = build_path(path,
+                       ["toxicological information",
+                        "toxicokinetics metabolism and distribution",
+                        "dermal absorption",
+                        "SSS"])
+
+    for file in glob.glob(files.replace("sss", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        adm = save_data(data, ECHA_TOX_DA_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", d("#page_header h2").text())],
+                        [("reliability", ".reliability:first"),
+                         ("type_invivo_invitro", ".TYPE_INVIVO_INVITRO"),
+                         ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                         ("testmat_indicator", ".TESTMAT_INDICATOR"),
+                         ("organism", ".ORGANISM"),
+                         ("sex", ".SEX"),
+                         ("exp_period", ".EXP_PERIOD"),
+                         ("vehicle_tox", ".VEHICLE_TOX"),
+                         ("doses_concentrations", ".DOSES_CONCENTRATIONS"),
+                         ("signs_symptoms_toxicity", ".SIGNS_SYMPTOMS_TOXICITY"),
+                         ("dermal_irritation", ".DERMAL_IRRITATION")])
+        adm = adm[0]
+
+        logging.info("Guideline")
+        save_data(data.find(".set.GUIDELINE"),
+                  ECHA_TOX_DA_GUIDELINES,
+                  ("TOX_DA_ID", adm),
+                  [("guideline", ".GUIDELINE"),
+                   ("qualifier", ".QUALIFIER")])
+
+        logging.info("Refs")
+        save_refs(data,
+                  ECHA_TOX_DA_REF,
+                  ("TOX_DA_ID", adm))
+
+        logging.info("Data")
+        save_data(data.find(".set.ABSORPTION"),
+                  ECHA_TOX_DA_DATA,
+                  ("TOX_DA_ID", adm),
+                  [("timepoint", ".TIMEPOINT"),
+                   ("dose", ".DOSE"),
+                   ("loqualifier", ".LOQUALIFIER"),
+                   ("remarks", ".REMARKS")])
