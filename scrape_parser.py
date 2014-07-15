@@ -170,26 +170,9 @@ def dnel(substance, path):
 
 @db_session
 def toxicokinetics(substance, path):
-    files = build_path(path,
-                       ["toxicological information",
-                        "toxicokinetics metabolism and distribution",
-                        "basic toxicokinetics",
-                        "SSS"])
+    import toxicokinetics as tox
 
-    for file in glob.glob(files.replace("sss", "*")):
-        d = open_file(file)
-        data = d("#inner")
-
-        kwargs = dict(
-            subst_id = substance,
-            esr = d("#page_header h2").text(),
-            reliability = value_by_select(data, ".reliability"),
-            type_invivo_invitro = value_by_select(data, ".TYPE_INVIVO_INVITRO"),
-            study_objective = value_by_select(data, ".STUDY_OBJECTIVE"),
-            glp = value_by_select(data, ".GLP_COMPLIANCE_STATEMENT"),
-            testmat_indicator = value_by_select(data, ".TESTMAT_INDICATOR"))
-
-        basic = find_or_create(ECHA_TOX_BTK_ADM, **fieldify(kwargs))
+    tox.basic(substance, path)
 
 @db_session
 def parse(path):

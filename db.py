@@ -122,7 +122,7 @@ class ECHA_TOX_BTK_REF(db.Entity):
 class ECHA_TOX_BTK_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_BTK_ID", ECHA_TOX_BTK_ADM), "TOX_BTK_DATA_ID",
                                ["organism", "sex", "route", "vehicle_tox", "exp_period",
-                                "doses_concetrations", "metabolites", "interpret_rs_submitter"])
+                                "doses_concentrations", "metabolites", "interpret_rs_submitter"])
 
 class ECHA_TOX_DA_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_DA_ID",
