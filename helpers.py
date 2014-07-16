@@ -25,12 +25,24 @@ def value_by_select(data, selector):
 def html_value_by_select(data, selector):
     return data.find("%s .value" % selector).html() or ""
 
+def get_esr(d):
+    return d("#page_header h2").text()
+
 def fieldify(kwargs):
     return dict((k.upper(), v) for k, v in kwargs.iteritems())
+
+def magic_fields(field):
+    if len(field) < 2:
+        k = field[0]
+        field = (k, ".%s" % k.upper())
+    return field
 
 def save_data(data, table, known_data, fields):
     models = []
     known_data = [known_data] if type(known_data) == tuple else known_data
+
+    fields = [(f[0], ".%s" % f[0].upper()) if len(f) < 2 else f
+              for f in fields]
 
     for d in data:
         d = pq(d)
@@ -55,3 +67,9 @@ def save_refs(data, table, parent):
                       ("reference_year", ".REFERENCE_YEAR"),
                       ("reference_title", ".REFERENCE_TITLE"),
                       ("reference_source", ".REFERENCE_SOURCE")])
+
+def save_guidelines(data, table, parent):
+    return save_data(data.find(".set.GUIDELINE"),
+                     table, parent,
+                     [("guideline", ".GUIDELINE"),
+                      ("qualifier", ".QUALIFIER")])

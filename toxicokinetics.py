@@ -63,9 +63,10 @@ def dermal(substance, path):
         d = open_file(file)
         data = d("#inner")
 
+        logging.info("Esr, %s" % get_esr(d))
         adm = save_data(data, ECHA_TOX_DA_ADM,
                         [("SUBST_ID", substance),
-                         ("esr", d("#page_header h2").text())],
+                         ("esr", get_esr(d))],
                         [("reliability", ".reliability:first"),
                          ("type_invivo_invitro", ".TYPE_INVIVO_INVITRO"),
                          ("glp", ".GLP_COMPLIANCE_STATEMENT"),
@@ -99,3 +100,50 @@ def dermal(substance, path):
                    ("dose", ".DOSE"),
                    ("loqualifier", ".LOQUALIFIER"),
                    ("remarks", ".REMARKS")])
+
+def acute(substance, path):
+    files = build_path(path,
+                       ["toxicological information",
+                        "acute toxicity",
+                        "SSS"])
+
+    for file in glob.glob(files.replace("sss", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        logging.info("Esr, %s" % get_esr(d))
+        adm = save_data(data, ECHA_TOX_ACUTE_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", get_esr(d))],
+                        [("reliability", ".reliability:first"),
+                         ("test_type", ".TEST_TYPE_ACUTETOX"),
+                         ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                         ("testmat_indicator", ".TESTMAT_INDICATOR"),
+                         ("organism", ".ORGANISM"),
+                         ("sex", ".SEX"),
+                         ("route", ".ROUTE"),
+                         ("vehicle_tox", ".VEHICLE_TOX"),
+                         ("exp_period_txt", ".EXP_PERIOD"),
+                         ("interpret_rs_submitter", ".INTERPRET_RS_SUBMITTER")])
+        adm = adm[0]
+
+        logging.info("Guidelines")
+        save_guidelines(data,
+                        ECHA_TOX_ACUTE_GUIDELINES,
+                        ("TOX_ACUTE_ID", adm))
+
+        logging.info("Refs")
+        save_refs(data,
+                  ECHA_TOX_ACUTE_REF,
+                  ("TOX_ACUTE_ID", adm))
+
+        logging.info("Data")
+        save_data(data.find(".set.EFFLEVEL"),
+                  ECHA_TOX_ACUTE_DATA,
+                  ("TOX_ACUTE_ID", adm),
+                  [("sex",),
+                   ("endpoint",),
+                   ("loqualifier",),
+                   ("exp_period_value",),
+                   ("conf_limits_loqualifier",),
+                   ("remarks", ".REM")])
