@@ -147,3 +147,50 @@ def acute(substance, path):
                    ("exp_period_value",),
                    ("conf_limits_loqualifier",),
                    ("remarks", ".REM")])
+
+def irritation(substance, path):
+    files = build_path(path,
+                       ["toxicological information",
+                        "irritation corrosion",
+                        "SSS"])
+
+    for file in glob.glob(files.replace("sss", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        logging.info("Esr, %s" % get_esr(d))
+        adm = save_data(data, ECHA_TOX_IC_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", get_esr(d))],
+                        [("reliability", ".RELIABILITY"),
+                         ("type_invivo_invitro",),
+                         ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                         ("testmat_indicator",),
+                         ("organism",),
+                         ("sex",),
+                         ("exp_period",),
+                         ("observ_period",),
+                         ("vehicle_tox",),
+                         ("interpret_rs_submitter",),
+                         ("criteria_submitter",),
+                         ("response_data",)])
+        adm = adm[0]
+
+        logging.info("Guidelines")
+        save_guidelines(data, ECHA_TOX_IC_GUIDELINES,
+                        ("TOX_IC_ID", adm))
+
+        logging.info("Refs")
+        save_refs(data, ECHA_TOX_IC_REF,
+                  ("TOX_IC_ID", adm))
+
+        logging.info("Data")
+        save_data(data.find("#GEN_RESULTS_HD"), ECHA_TOX_IC_DATA,
+                            ("TOX_IC_ID", adm),
+                            [("parameter",),
+                             ("basis",),
+                             ("timepoint",),
+                             ("score_loqualifier",),
+                             ("scale",),
+                             ("reversibility",),
+                             ("remarks", ".REM")])
