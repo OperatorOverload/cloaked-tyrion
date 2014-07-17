@@ -1,5 +1,5 @@
 
-import os, re, codecs
+import os, re, codecs, glob, logging
 from pyquery import PyQuery as pq
 from slugify import slugify
 
@@ -50,7 +50,7 @@ def save_data(data, table, known_data, fields):
         kwargs = [(field, value_by_select(d, selector))
                   for field, selector in fields]
 
-        if all(True if len(v.strip()) <= 0 else False for k, v in kwargs):
+        if all(True if len(v.strip()) <= 0 else False for k, v in kwargs) and len(known_data) == 0:
             continue
 
         kwargs = dict(kwargs + known_data)
@@ -73,3 +73,16 @@ def save_guidelines(data, table, parent):
                      table, parent,
                      [("guideline", ".GUIDELINE"),
                       ("qualifier", ".QUALIFIER")])
+
+def parse_files(path, path_parts, step_func):
+    files = build_path(path, path_parts)
+
+    for file in glob.glob(files.replace("sss", "*")):
+        d = open_file(file)
+        data = d("#inner")
+
+        logging.info("Esr, %s" % get_esr(d))
+        step_func(d, data)
+
+def make_fields(custom, default):
+    return custom + [(f,) for f in default]

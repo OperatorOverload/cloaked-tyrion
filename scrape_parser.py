@@ -175,7 +175,8 @@ def toxicokinetics(substance, path):
     #tox.basic(substance, path)
     #tox.dermal(substance, path)
     #tox.acute(substance, path)
-    tox.irritation(substance, path)
+    #tox.irritation(substance, path)
+    tox.sensitisation(substance, path)
 
 @db_session
 def parse(path):

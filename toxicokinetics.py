@@ -40,7 +40,7 @@ def basic(substance, path):
                   ("TOX_BTK_ID", basic))
 
         logging.info("Data")
-        save_data(data,
+        save_data(data.find("#GEN_RESULTS_HD"),
                   ECHA_TOX_BTK_DATA,
                   ("TOX_BTK_ID", basic),
                   [("organism", ".ORGANISM"),
@@ -162,7 +162,7 @@ def irritation(substance, path):
         adm = save_data(data, ECHA_TOX_IC_ADM,
                         [("SUBST_ID", substance),
                          ("esr", get_esr(d))],
-                        [("reliability", ".RELIABILITY"),
+                        [("reliability", ".reliability:first"),
                          ("type_invivo_invitro",),
                          ("glp", ".GLP_COMPLIANCE_STATEMENT"),
                          ("testmat_indicator",),
@@ -194,3 +194,45 @@ def irritation(substance, path):
                              ("scale",),
                              ("reversibility",),
                              ("remarks", ".REM")])
+
+def sensitisation(substance, path):
+    def step(d, data):
+        adm = save_data(data, ECHA_TOX_SENS_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", get_esr(d))],
+                        make_fields(
+                            [("reliability", ".reliability:first"),
+                             ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                            ["type_invivo_invitro",
+                             "testmat_indicator",
+                             "organism",
+                             "sex",
+                             "exp_period",
+                             "observ_period",
+                             "route_induction",
+                             "route_challenge",
+                             "vehicle_tox",
+                             "doses_concentrations",
+                             "interpret_rs_submitter",
+                             "criteria_submitter",
+                             "response_data"]))
+        print adm
+        adm = adm[0]
+
+        save_guidelines(data, ECHA_TOX_SENS_GUIDELINES,
+                        ("TOX_SENS_ID", adm))
+
+        save_refs(data, ECHA_TOX_SENS_REF,
+                  ("TOX_SENS_ID", adm))
+
+        save_data(data.find("#GEN_RESULTS_HD"), ECHA_TOX_SENS_DATA,
+                  ("TOX_SENS_ID", adm),
+                  make_fields([("remarks", ".REM")],
+                              ["reading",
+                               "timepoint",
+                               "group",
+                               "number_positive",
+                               "number_total"]))
+
+
+    parse_files(path, ["toxicological information", "sensitisation", "SSS"], step)
