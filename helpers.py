@@ -25,7 +25,6 @@ def value_by_select(data, selector):
         return d.html() or ""
     else:
         return d.text()
-    #return data.find("%s .value" % selector).text()
 
 def html_value_by_select(data, selector):
     return data.find("%s .value" % selector).html() or ""
