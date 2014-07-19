@@ -196,7 +196,7 @@ def irritation(substance, path):
                              ("remarks", ".REM")])
 
 def sensitisation(substance, path):
-    def step(d, data):
+    def step(d, data, file):
         adm = save_data(data, ECHA_TOX_SENS_ADM,
                         [("SUBST_ID", substance),
                          ("esr", get_esr(d))],
@@ -216,7 +216,6 @@ def sensitisation(substance, path):
                              "interpret_rs_submitter",
                              "criteria_submitter",
                              "response_data"]))
-        print adm
         adm = adm[0]
 
         save_guidelines(data, ECHA_TOX_SENS_GUIDELINES,
@@ -238,7 +237,7 @@ def sensitisation(substance, path):
     parse_files(path, ["toxicological information", "sensitisation", "SSS"], step)
 
 def repeated_dose(substance, path):
-    def step(d, data):
+    def step(d, data, file):
         adm = save_data(data, ECHA_TOX_RDT_ADM,
                         [("SUBST_ID", substance),
                          ("esr", get_esr(d))],
@@ -271,3 +270,67 @@ def repeated_dose(substance, path):
     parse_files(path,
                 ["toxicological information", "repeated dose toxicity", "SSS"],
                 step)
+
+def genetic(substance, path):
+    def step(d, data, file):
+        adm = save_data(data, ECHA_TOX_CRM_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", get_esr(d))],
+                        make_fields([("reliability", ".reliability:first"),
+                                     ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                                    ["genotoxicity_type",
+                                     "studytype",
+                                     "testtype_tox",
+                                     "testmat_indicator",
+                                     "organism",
+                                     "sex",
+                                     "route",
+                                     "vehicle_tox",
+                                     "exp_period",
+                                     "frequency",
+                                     "test_period",
+                                     "interpret_rs_submitter",
+                                     "rs_maternal_tox",
+                                     "rs_embryotox_tera"]))
+        adm = adm[0]
+
+        save_guidelines(data, ECHA_TOX_CRM_GUIDELINES,
+                        ("TOX_CRM_ID", adm))
+
+        save_refs(data, ECHA_TOX_CRM_REF,
+                  ("TOX_CRM_ID", adm))
+
+        study_type = "genetic"
+        if "carcinogenicity" in file:
+            study_type = "carcinogenicity"
+        if "toxicity-to-reproduction" in file:
+            study_type = "reproduction"
+
+        table = {
+            "genetic": ECHA_TOX_CRM_MUTA_DATA,
+            "carcinogenicity": ECHA_TOX_CRM_CARC_DATA,
+            "reproduction": ECHA_TOX_CRM_REPR_DATA
+        }
+        fields = {
+            "genetic": make_fields([],
+                                   ["organism", "met_act_indicator", "testsystem",
+                                    "sex", "genotoxicity", "toxicity", "cytotoxicity",
+                                    "veh_contr_valid", "neg_contr_valid",
+                                    "pos_contr_valid"]),
+            "carcinogenicity": make_fields([],
+                                           ["endpoint", "effecttype", "loqualifier",
+                                            "sex"]),
+            "reproduction": make_fields([],
+                                        ["endpoint", "effecttype", "generation",
+                                         "sex", "loqualifier"])
+        }
+
+        save_data(data.find("#GEN_RESULTS_HD"), table[study_type],
+                  ("TOX_CRM_ID", adm),
+                  fields[study_type])
+
+
+    map(lambda f: parse_files(path,
+                              ["toxicological information", f, "SSS"],
+                              step),
+        ["genetic toxicity", "carcinogenicity", "toxicity to reproduction"])

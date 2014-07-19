@@ -20,7 +20,12 @@ def pick_by_label(data, label):
         lambda i, this: pq(this).find(".label").text() == label)
 
 def value_by_select(data, selector):
-    return data.find("%s .value" % selector).text()
+    d = data.find("%s .value" % selector)
+    if "QUALIFIER" in selector and len(d.find("span")) > 1:
+        return d.html() or ""
+    else:
+        return d.text()
+    #return data.find("%s .value" % selector).text()
 
 def html_value_by_select(data, selector):
     return data.find("%s .value" % selector).html() or ""
@@ -82,7 +87,7 @@ def parse_files(path, path_parts, step_func):
         data = d("#inner")
 
         logging.info("Esr, %s" % get_esr(d))
-        step_func(d, data)
+        step_func(d, data, file)
 
 def make_fields(custom, default):
     return custom + [(f,) for f in default]

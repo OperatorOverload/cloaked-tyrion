@@ -265,7 +265,7 @@ class ECHA_TOX_CRM_MUTA_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_MUTA_DATA_ID",
                                ["organism", "met_act_indicator", "testsystem", "sex",
                                 "genotoxicity", "toxicity", "cytotoxicity",
-                                "veh_contr_valid", "neg_contr_valid", "post_contr_valid"])
+                                "veh_contr_valid", "neg_contr_valid", "pos_contr_valid"])
 
 class ECHA_TOX_CRM_CARC_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_CARD_DATA_ID",
@@ -273,7 +273,7 @@ class ECHA_TOX_CRM_CARC_DATA(db.Entity):
 
 class ECHA_TOX_CRM_REPR_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REPR_DATA_ID",
-                               ["endpoint", "generation", "loqualifier", "sex"])
+                               ["endpoint", "generation", "loqualifier", "sex", "effecttype"])
 
 
 class ECHA_PHYSCHEM_ADM(db.Entity):
