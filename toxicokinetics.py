@@ -236,3 +236,38 @@ def sensitisation(substance, path):
 
 
     parse_files(path, ["toxicological information", "sensitisation", "SSS"], step)
+
+def repeated_dose(substance, path):
+    def step(d, data):
+        adm = save_data(data, ECHA_TOX_RDT_ADM,
+                        [("SUBST_ID", substance),
+                         ("esr", get_esr(d))],
+                        make_fields([("reliability", ".reliability:first"),
+                                     ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                                    ["testtype_tox",
+                                     "testmat_indicator",
+                                     "organism",
+                                     "sex",
+                                     "exp_period",
+                                     "frequency",
+                                     "route",
+                                     "vehicle_tox"]))
+        adm = adm[0]
+
+        save_guidelines(data, ECHA_TOX_RDT_GUIDELINES,
+                        ("TOX_RDT_ID", adm))
+
+        save_refs(data, ECHA_TOX_RDT_REF,
+                  ("TOX_RDT_ID", adm))
+
+        save_data(data.find("#GEN_RESULTS_HD"), ECHA_TOX_RDT_DATA,
+                  ("TOX_RDT_ID", adm),
+                  make_fields([("remarks", ".REM")],
+                              ["endpoint",
+                               "loqualifier",
+                               "sex",
+                               "eff_conc_type"]))
+
+    parse_files(path,
+                ["toxicological information", "repeated dose toxicity", "SSS"],
+                step)

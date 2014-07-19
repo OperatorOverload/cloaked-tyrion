@@ -177,6 +177,7 @@ def toxicokinetics(substance, path):
     #tox.acute(substance, path)
     #tox.irritation(substance, path)
     tox.sensitisation(substance, path)
+    tox.repeated_dose(substance, path)
 
 @db_session
 def parse(path):
