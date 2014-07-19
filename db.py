@@ -281,7 +281,7 @@ class ECHA_PHYSCHEM_ADM(db.Entity):
                                ["esr", "reliability", "method_type", "partcoeff_type",
                                 "testtype", "glp", "testmat_indicator",
                                 "interpretation_results", "org_solvents_stability",
-                                "org_solvents_degrad", "disocciation_indicator",
+                                "org_solvents_degrad", "dissociation_indicator",
                                 "distribution_type"])
 
     GUIDELINES = Set("ECHA_PHYSCHEM_GUIDELINES")

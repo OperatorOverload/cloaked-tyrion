@@ -181,6 +181,12 @@ def toxicokinetics(substance, path):
     tox.genetic(substance, path)
 
 @db_session
+def physical(substance, path):
+    import physical as phys
+
+    phys.parse(substance, path)
+
+@db_session
 def parse(path):
     path = unpack(path)
     dossier_id = os.path.split(path)[1]
@@ -202,8 +208,11 @@ def parse(path):
     # logging.info("Dnels for %s" % dossier_id)
     # dnel(substance, path)
 
-    logging.info("Toxicokinetics for %s" % dossier_id)
-    toxicokinetics(substance, path)
+    # logging.info("Toxicokinetics for %s" % dossier_id)
+    # toxicokinetics(substance, path)
+
+    logging.info("Physical properties for %s" % dossier_id)
+    physical(substance, path)
 
 def unpack(path):
     unpacked = os.path.join(os.path.join(os.getcwd(), "data"),
