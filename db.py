@@ -9,7 +9,8 @@ MAX_LENGTH=6000
 def make_model(parent, id, fields):
     def inner(future_class_name, future_class_parents, future_class_attr):
         for name in fields:
-            future_class_attr[name.upper()] = Optional(unicode, MAX_LENGTH)
+            max_length = MAX_LENGTH*5 if name == "reliability" else MAX_LENGTH
+            future_class_attr[name.upper()] = Optional(unicode, max_length)
 
         name, table = parent
         future_class_attr[name] = Required(table)
@@ -58,7 +59,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     TOX_ID = PrimaryKey(int, auto=True)
     TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
     ESR = Optional(unicode, MAX_LENGTH)
-    RELIABILITY = Optional(unicode, MAX_LENGTH)
+    RELIABILITY = Optional(unicode, MAX_LENGTHb)
     GUIDELINE = Optional(unicode, MAX_LENGTH)
     QUALIFIER = Optional(unicode, MAX_LENGTH)
     GLP = Optional(unicode, MAX_LENGTH)
