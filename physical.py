@@ -176,5 +176,5 @@ def granulometry(data, adm):
         ECHA_PHYSCHEM_GRANULOMETRY_DIST,
         ("PHYSCHEM_ID", adm),
         make_fields([("remarks", ".REM"),
-                     ("loqualifier", ".DIST_LOQUALIFIER")],
+                     ("dist_loqualifier", ".DIST_LOQUALIFIER")],
                     ["size_loqualifier"]))
