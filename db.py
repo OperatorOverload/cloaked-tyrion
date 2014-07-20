@@ -315,10 +315,10 @@ class ECHA_PHYSCHEM_REF(db.Entity):
 
 class ECHA_PHYSCHEM_APPEARANCE(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_APP_ID",
-                               ["form", "colour", "odour", "type"])
+                               ["physical_state", "form", "colour", "odour", "type"])
 
 class ECHA_PHYSCHEM_MELTING(db.Entity):
-    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_MELT_ID",
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_MELT_ID",
                                ["loqualifier", "pressure", "decomp_indicator",
                                 "sublimation_indicator"])
 
@@ -341,7 +341,7 @@ class ECHA_PHYSCHEM_PARTC(db.Entity):
 
 class ECHA_PHYSCHEM_WSOLUBILITY(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_WS_ID",
-                               ["temp_value", "ph_loqualifier"])
+                               ["loqualifier", "temp_value", "ph_loqualifier"])
 
 class ECHA_PHYSCHEM_STENSION(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_ST_ID",
@@ -361,12 +361,12 @@ class ECHA_PHYSCHEM_FLAMMABILITY(db.Entity):
                                 "upexplos_limit", "interpret_results_subm"])
 
 class ECHA_PHYSCHEM_OXIDIZING_PROP(db.Entity):
-    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OXI_ID",
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OXI_ID",
                                ["parameter", "loqualifier", "remarks"])
 
 class ECHA_PHYSCHEM_ORG_SOL_DEGRADATION(db.Entity):
-    __metaclass__ = make_model(("PHSYCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OSD_ID",
-                               ["no", "identifier", "identify"])
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OSD_ID",
+                               ["no", "identifier", "identity"])
 
 class ECHA_PHYSCHEM_DISSCO(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_DISSCO_ID",
