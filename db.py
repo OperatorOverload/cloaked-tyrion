@@ -59,7 +59,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     TOX_ID = PrimaryKey(int, auto=True)
     TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
     ESR = Optional(unicode, MAX_LENGTH)
-    RELIABILITY = Optional(unicode, MAX_LENGTHb)
+    RELIABILITY = Optional(unicode, MAX_LENGTH)
     GUIDELINE = Optional(unicode, MAX_LENGTH)
     QUALIFIER = Optional(unicode, MAX_LENGTH)
     GLP = Optional(unicode, MAX_LENGTH)
