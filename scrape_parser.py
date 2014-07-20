@@ -193,23 +193,23 @@ def parse(path):
 
     substance = find_or_create(Substance, DOSSIER_ID=dossier_id)
 
-    # logging.info("Ecotoxicity for %s" % dossier_id)
-    # ecotoxicological(substance, path)
+    logging.info("Ecotoxicity for %s" % dossier_id)
+    ecotoxicological(substance, path)
 
-    # logging.info("Aquatic toxicity for %s" % dossier_id)
-    # aquatic(substance, path)
+    logging.info("Aquatic toxicity for %s" % dossier_id)
+    aquatic(substance, path)
 
-    # logging.info("Terrestrial toxicity for %s" % dossier_id)
-    # terrestrial(substance, path)
+    logging.info("Terrestrial toxicity for %s" % dossier_id)
+    terrestrial(substance, path)
 
-    # logging.info("Sediment toxicity for %s" % dossier_id)
-    # sediment(substance, path)
+    logging.info("Sediment toxicity for %s" % dossier_id)
+    sediment(substance, path)
 
-    # logging.info("Dnels for %s" % dossier_id)
-    # dnel(substance, path)
+    logging.info("Dnels for %s" % dossier_id)
+    dnel(substance, path)
 
-    # logging.info("Toxicokinetics for %s" % dossier_id)
-    # toxicokinetics(substance, path)
+    logging.info("Toxicokinetics for %s" % dossier_id)
+    toxicokinetics(substance, path)
 
     logging.info("Physical properties for %s" % dossier_id)
     physical(substance, path)
@@ -233,6 +233,6 @@ if __name__ == "__main__":
     for file in os.listdir(os.path.join(os.getcwd(), "data")):
         if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
-            #cleanup(os.path.join(os.getcwd(), "data", file))
+            cleanup(os.path.join(os.getcwd(), "data", file))
 
     print "Done."
