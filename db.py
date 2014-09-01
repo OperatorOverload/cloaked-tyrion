@@ -64,6 +64,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     GLP = Optional(unicode, MAX_LENGTH)
     ORGANISM = Optional(unicode, MAX_LENGTH*3)
     TESTMAT_INDICATOR = Optional(unicode, MAX_LENGTH)
+    DATAWAIVING = Optional(unicode, MAX_LENGTH)
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
 
@@ -105,7 +106,8 @@ class ECHA_TOX_DNEL(db.Entity):
 class ECHA_TOX_BTK_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_BTK_ID",
                                ["esr", "reliability", "type_invivo_invitro",
-                                "study_objective", "glp", "testmat_indicator"])
+                                "study_objective", "glp", "testmat_indicator",
+                                "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_BTK_GUIDELINES")
     REFS = Set("ECHA_TOX_BTK_REF")
@@ -122,14 +124,16 @@ class ECHA_TOX_BTK_REF(db.Entity):
 class ECHA_TOX_BTK_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_BTK_ID", ECHA_TOX_BTK_ADM), "TOX_BTK_DATA_ID",
                                ["organism", "sex", "route", "vehicle_tox", "exp_period",
-                                "doses_concentrations", "metabolites", "interpret_rs_submitter"])
+                                "doses_concentrations", "metabolites",
+                                "interpret_rs_submitter", "datawaiving"])
 
 class ECHA_TOX_DA_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_DA_ID",
                                ["esr", "reliability", "type_invivo_invitro", "glp",
                                 "testmat_indicator", "organism", "sex", "exp_period",
                                 "vehicle_tox", "doses_concentrations",
-                                "signs_symptoms_toxicity", "dermal_irritation"])
+                                "signs_symptoms_toxicity", "dermal_irritation",
+                                "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_DA_GUIDELINES")
     REFS = Set("ECHA_TOX_DA_REF")
@@ -151,7 +155,7 @@ class ECHA_TOX_ACUTE_ADM(db.Entity):
                                ["esr", "reliability", "test_type", "glp",
                                 "testmat_indicator", "organism", "sex", "route",
                                 "vehicle_tox", "exp_period_txt",
-                                "interpret_rs_submitter"])
+                                "interpret_rs_submitter", "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_ACUTE_GUIDELINES")
     REFS = Set("ECHA_TOX_ACUTE_REF")
@@ -174,7 +178,7 @@ class ECHA_TOX_IC_ADM(db.Entity):
                                ["esr", "reliability", "type_invivo_invitro", "glp",
                                 "testmat_indicator", "organism", "sex", "exp_period",
                                 "observ_period", "vehicle_tox", "interpret_rs_submitter",
-                                "criteria_submitter", "response_data"])
+                                "criteria_submitter", "response_data", "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_IC_GUIDELINES")
     REFS = Set("ECHA_TOX_IC_REF")
@@ -199,7 +203,7 @@ class ECHA_TOX_SENS_ADM(db.Entity):
                                 "observ_period", "route_induction", "route_challenge",
                                 "vehicle_tox", "doses_concentrations",
                                 "interpret_rs_submitter", "criteria_submitter",
-                                "response_data"])
+                                "response_data", "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_SENS_GUIDELINES")
     REFS = Set("ECHA_TOX_SENS_REF")
@@ -221,7 +225,7 @@ class ECHA_TOX_RDT_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_RDT_ID",
                                ["esr", "reliability", "testtype_tox", "glp",
                                 "testmat_indicator", "organism", "sex", "exp_period",
-                                "frequency", "route", "vehicle_tox"])
+                                "frequency", "route", "vehicle_tox", "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_RDT_GUIDELINES")
     REFS = Set("ECHA_TOX_RDT_REF")
@@ -246,7 +250,7 @@ class ECHA_TOX_CRM_ADM(db.Entity):
                                 "studytype", "testtype_tox", "glp", "testmat_indicator",
                                 "organism", "sex", "route", "vehicle_tox", "exp_period",
                                 "frequency", "test_period", "interpret_rs_submitter",
-                                "rs_maternal_tox", "rs_embryotox_tera"])
+                                "rs_maternal_tox", "rs_embryotox_tera", "datawaiving"])
 
     GUIDELINES = Set("ECHA_TOX_CRM_GUIDELINES")
     REFS = Set("ECHA_TOX_CRM_REF")
@@ -282,7 +286,7 @@ class ECHA_PHYSCHEM_ADM(db.Entity):
                                 "testtype", "glp", "testmat_indicator",
                                 "interpretation_results", "org_solvents_stability",
                                 "org_solvents_degrad", "dissociation_indicator",
-                                "distribution_type"])
+                                "distribution_type", "datawaiving"])
 
     GUIDELINES = Set("ECHA_PHYSCHEM_GUIDELINES")
     REFS = Set("ECHA_PHYSCHEM_REF")

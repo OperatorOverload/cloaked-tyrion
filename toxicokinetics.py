@@ -22,7 +22,8 @@ def basic(substance, path):
             type_invivo_invitro = value_by_select(data, ".TYPE_INVIVO_INVITRO"),
             study_objective = value_by_select(data, ".STUDY_OBJECTIVE"),
             glp = value_by_select(data, ".GLP_COMPLIANCE_STATEMENT"),
-            testmat_indicator = value_by_select(data, ".TESTMAT_INDICATOR"))
+            testmat_indicator = value_by_select(data, ".TESTMAT_INDICATOR"),
+            datawaiving = value_by_select(data, ".dataWaiving"))
 
         basic = find_or_create(ECHA_TOX_BTK_ADM, **fieldify(kwargs))
 
@@ -77,7 +78,8 @@ def dermal(substance, path):
                          ("vehicle_tox", ".VEHICLE_TOX"),
                          ("doses_concentrations", ".DOSES_CONCENTRATIONS"),
                          ("signs_symptoms_toxicity", ".SIGNS_SYMPTOMS_TOXICITY"),
-                         ("dermal_irritation", ".DERMAL_IRRITATION")])
+                         ("dermal_irritation", ".DERMAL_IRRITATION"),
+                         ("datawaiving", ".dataWaiving")])
         adm = adm[0]
 
         logging.info("Guideline")
@@ -124,7 +126,8 @@ def acute(substance, path):
                          ("route", ".ROUTE"),
                          ("vehicle_tox", ".VEHICLE_TOX"),
                          ("exp_period_txt", ".EXP_PERIOD"),
-                         ("interpret_rs_submitter", ".INTERPRET_RS_SUBMITTER")])
+                         ("interpret_rs_submitter", ".INTERPRET_RS_SUBMITTER"),
+                         ("datawaiving", ".dataWaiving")])
         adm = adm[0]
 
         logging.info("Guidelines")
@@ -173,7 +176,8 @@ def irritation(substance, path):
                          ("vehicle_tox",),
                          ("interpret_rs_submitter",),
                          ("criteria_submitter",),
-                         ("response_data",)])
+                         ("response_data",),
+                         ("datawaiving", ".dataWaiving")])
         adm = adm[0]
 
         logging.info("Guidelines")
@@ -202,7 +206,8 @@ def sensitisation(substance, path):
                          ("esr", get_esr(d))],
                         make_fields(
                             [("reliability", ".reliability:first"),
-                             ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                             ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                             ("datawaiving", ".dataWaiving")],
                             ["type_invivo_invitro",
                              "testmat_indicator",
                              "organism",
@@ -242,7 +247,8 @@ def repeated_dose(substance, path):
                         [("SUBST_ID", substance),
                          ("esr", get_esr(d))],
                         make_fields([("reliability", ".reliability:first"),
-                                     ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                                     ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                                     ("datawaiving", ".dataWaiving")],
                                     ["testtype_tox",
                                      "testmat_indicator",
                                      "organism",
@@ -277,7 +283,8 @@ def genetic(substance, path):
                         [("SUBST_ID", substance),
                          ("esr", get_esr(d))],
                         make_fields([("reliability", ".reliability:first"),
-                                     ("glp", ".GLP_COMPLIANCE_STATEMENT")],
+                                     ("glp", ".GLP_COMPLIANCE_STATEMENT"),
+                                     ("datawaiving", ".dataWaiving")],
                                     ["genotoxicity_type",
                                      "studytype",
                                      "testtype_tox",

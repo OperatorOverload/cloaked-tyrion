@@ -81,6 +81,7 @@ def toxicity(files, substance, tox_type):
         glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
         organism = data.find(".ORGANISM").find(".value:first").text()
         testmat = data.find(".TESTMAT_INDICATOR").find(".value").text()
+        datawaiving = value_by_select(data, ".dataWaiving")
 
         aqua_adm = find_or_create(ECHA_ECOTOX_TOX_ADM,
                                   SUBST_ID=substance,
@@ -91,7 +92,8 @@ def toxicity(files, substance, tox_type):
                                   QUALIFIER=qualifier,
                                   GLP=glp,
                                   ORGANISM=organism,
-                                  TESTMAT_INDICATOR=testmat)
+                                  TESTMAT_INDICATOR=testmat,
+                                  DATAWAIVING=datawaiving)
 
         references(aqua_adm, data)
         datas(aqua_adm, data)
