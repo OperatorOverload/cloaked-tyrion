@@ -56,7 +56,9 @@ def save_data(data, table, known_data, fields):
         kwargs = [(field, value_by_select(d, selector))
                   for field, selector in fields]
 
-        if all(True if len(v.strip()) <= 0 else False for k, v in kwargs) and len(known_data) == 0:
+        if all(v.strip() <= 0
+               for k, v in kwargs + known_data
+               if type(v) == str):
             continue
 
         kwargs = dict(kwargs + known_data)
