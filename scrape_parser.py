@@ -153,7 +153,7 @@ def dnel(substance, path):
             target = exposure.parents(".section").find("h3").text()
             effects = exposure.parent().parent().find("h4").text()
             hac = class_ends(data, "_DNMEL").find(".value").text()
-            value = class_ends(data, "_DNMEL_VALUE").find(".value span:first").text()
+            value = class_ends(data, "_DNMEL_VALUE").find(".value").html() or ""
             sens_endp = class_ends(data, "_SENS_ENDP").find(".value").text()
             route = class_ends(data, "_ROUTE").find(".value").text()
 
@@ -233,6 +233,6 @@ if __name__ == "__main__":
     for file in os.listdir(os.path.join(os.getcwd(), "data")):
         if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
-            cleanup(os.path.join(os.getcwd(), "data", file))
+            #cleanup(os.path.join(os.getcwd(), "data", file))
 
     print "Done."
