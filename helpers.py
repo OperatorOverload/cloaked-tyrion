@@ -23,7 +23,7 @@ def value_by_select(data, selector):
     d = data.find("%s .value" % selector)
     if len(d.find("span")) > 1 and any(fragment in selector for fragment in
                                        ["QUALIFIER", ".FORM", ".ODOUR", ".TEMP_VALUE",
-                                        "EXPLOS_LIMIT", ".PERCENTILE"]):
+                                        "EXPLOS_LIMIT", ".PERCENTILE", "_VALUE"]):
         return d.html() or ""
     else:
         return d.text()

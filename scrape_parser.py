@@ -119,9 +119,8 @@ def datas(aqua_adm, data):
     for data in data.find("#GEN_RESULTS_HD .set"):
         data = pq(data)
 
-        duration_value = data.find(".EXP_DURATION_VALUE").html() or ""
-
-        eff_conc = data.find(".LOQUALIFIER .value").html() or ""
+        duration_value = value_by_select(data, ".EXP_DURATION_VALUE")
+        eff_conc = value_by_select(data, ".LOQUALIFIER")
 
         datum = find_or_create(
             ECHA_ECOTOX_TOX_DATA,
