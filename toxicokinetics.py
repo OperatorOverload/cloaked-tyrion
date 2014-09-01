@@ -185,7 +185,7 @@ def irritation(substance, path):
                   ("TOX_IC_ID", adm))
 
         logging.info("Data")
-        save_data(data.find("#GEN_RESULTS_HD"), ECHA_TOX_IC_DATA,
+        save_data(data.find("#GEN_RESULTS_HD .OVERALL_RS"), ECHA_TOX_IC_DATA,
                             ("TOX_IC_ID", adm),
                             [("parameter",),
                              ("basis",),
