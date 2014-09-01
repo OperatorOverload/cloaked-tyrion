@@ -1,4 +1,4 @@
 data/DISS*
 *.pyc
 *.pdf
-db.sqlite
+*.sqlite

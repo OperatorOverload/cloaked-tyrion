@@ -2,15 +2,14 @@
 from pony.orm import *
 
 db = Database('sqlite', 'db.sqlite', create_db=True)
-MAX_LENGTH=6000
+MAX_LENGTH=2000
 
 # since all our fields have the same properties anyway we can just make them
 # with a function, wish I started using this earlier"
 def make_model(parent, id, fields):
     def inner(future_class_name, future_class_parents, future_class_attr):
         for name in fields:
-            max_length = MAX_LENGTH*5 if name == "reliability" else MAX_LENGTH
-            future_class_attr[name.upper()] = Optional(unicode, max_length)
+            future_class_attr[name.upper()] = Optional(unicode, MAX_LENGTH)
 
         name, table = parent
         future_class_attr[name] = Required(table)
@@ -80,7 +79,7 @@ class ECHA_ECOTOX_TOX_REF(db.Entity):
 class ECHA_ECOTOX_TOX_DATA(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
     TOX_DATA_ID = PrimaryKey(int, auto=True)
-    ORGANISM = Optional(unicode, MAX_LENGTH*3)
+    ORGANISM = Optional(unicode, MAX_LENGTH)
     EXP_DURATION_VALUE = Optional(unicode, MAX_LENGTH)
     ENDPOINT = Optional(unicode, MAX_LENGTH)
     EFF_CONC = Optional(unicode, MAX_LENGTH)
@@ -400,8 +399,12 @@ db.generate_mapping(create_tables=True)
 
 
 def find_or_create(model, **kwargs):
+    kwargs = {key: max_len(value) for key, value in kwargs.items()}
     obj = model.get(**kwargs)
     if obj == None:
         obj = model(**kwargs)
 
     return obj
+
+def max_len(value):
+    return value[:MAX_LENGTH] if type(value) == str and len(value) > MAX_LENGTH else value
