@@ -230,7 +230,7 @@ def sensitisation(substance, path):
         save_refs(data, ECHA_TOX_SENS_REF,
                   ("TOX_SENS_ID", adm))
 
-        save_data(data.find("#GEN_RESULTS_HD"), ECHA_TOX_SENS_DATA,
+        save_data(data.find("#GEN_RESULTS_HD .set.RESULTS"), ECHA_TOX_SENS_DATA,
                   ("TOX_SENS_ID", adm),
                   make_fields([("remarks", ".REM")],
                               ["reading",
