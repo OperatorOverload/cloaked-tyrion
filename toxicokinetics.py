@@ -18,7 +18,7 @@ def basic(substance, path):
         kwargs = dict(
             subst_id = substance,
             esr = d("#page_header h2").text(),
-            reliability = value_by_select(data, ".reliability"),
+            reliability = value_by_select(data, ".reliability:first"),
             type_invivo_invitro = value_by_select(data, ".TYPE_INVIVO_INVITRO"),
             study_objective = value_by_select(data, ".STUDY_OBJECTIVE"),
             glp = value_by_select(data, ".GLP_COMPLIANCE_STATEMENT"),
@@ -122,7 +122,7 @@ def acute(substance, path):
                          ("glp", ".GLP_COMPLIANCE_STATEMENT"),
                          ("testmat_indicator", ".TESTMAT_INDICATOR"),
                          ("organism", ".ORGANISM"),
-                         ("sex", ".SEX"),
+                         ("sex", ".SEX:first"),
                          ("route", ".ROUTE"),
                          ("vehicle_tox", ".VEHICLE_TOX"),
                          ("exp_period_txt", ".EXP_PERIOD"),
