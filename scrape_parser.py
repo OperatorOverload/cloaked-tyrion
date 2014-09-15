@@ -89,7 +89,13 @@ def toxicity(files, substance, tox_type):
                                   GLP=glp,
                                   ORGANISM=organism,
                                   TESTMAT_INDICATOR=testmat,
-                                  DATAWAIVING=datawaiving)
+                                  DATAWAIVING=datawaiving,
+                                  TEST_TYPE=value_by_select(data, ".TEST_TYPE"),
+                                  OXYGEN_CONDITIONS=value_by_select(data, ".OXYGEN_CONDITIONS"),
+                                  INOCULUM=value_by_select(data, ".INOCULUM"),
+                                  REFERENCE_SUBSTANCE=value_by_select(data, ".REFERENCE_SUBSTANCE"),
+                                  VALIDITY_CRIT_SUBM=value_by_select(data, ".VALIDITY_CRIT_SUBM"),
+                                  INTERPRET_RESULTS_SUBM=value_by_select(data, ".INTERPRETER_RESULTS_SUBM"))
 
         references(aqua_adm, data)
         datas(aqua_adm, data)

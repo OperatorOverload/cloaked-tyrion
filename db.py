@@ -54,15 +54,14 @@ class ECHA_ECOTOX_PNEC(db.Entity):
     EXTR_METH = Optional(unicode, MAX_LENGTH)
 
 class ECHA_ECOTOX_TOX_ADM(db.Entity):
-    SUBST_ID = Required(Substance)
-    TOX_ID = PrimaryKey(int, auto=True)
+    __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_ID",
+                               ["esr", "reliability", "glp", "organism",
+                                "testmat_indicator", "datawaiving", "test_type",
+                                "oxygen_conditions", "inoculum", "reference_substance",
+                                "validity_crit_subm", "interpret_results_subm"])
+
     TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
-    ESR = Optional(unicode, MAX_LENGTH)
-    RELIABILITY = Optional(unicode, MAX_LENGTH)
-    GLP = Optional(unicode, MAX_LENGTH)
-    ORGANISM = Optional(unicode, MAX_LENGTH*3)
-    TESTMAT_INDICATOR = Optional(unicode, MAX_LENGTH)
-    DATAWAIVING = Optional(unicode, MAX_LENGTH)
+
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
     GUIDELINES = Set("ECHA_ECOTOX_TOX_GUIDELINES")
