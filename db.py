@@ -336,7 +336,7 @@ class ECHA_PHYSCHEM_DENSITY(db.Entity):
 
 class ECHA_PHYSCHEM_VPRESSURE(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_VP_ID",
-                               ["loqualifier", "temp_value"])
+                               ["loqualifier", "temp_value", "pressure_loqualifier"])
 
 class ECHA_PHYSCHEM_PARTC(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_PARTC_ID",
@@ -394,7 +394,8 @@ class ECHA_PHYSCHEM_GRANULOMETRY_PS(db.Entity):
 
 class ECHA_PHYSCHEM_GRANULOMETRY_DIST(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GMT_DIST_ID",
-                               ["size_loqualifier", "dist_loqualifier", "remarks"])
+                               ["size_loqualifier", "dist_loqualifier", "remarks",
+                                "loqualifier"])
 
 
 db.generate_mapping(create_tables=True)

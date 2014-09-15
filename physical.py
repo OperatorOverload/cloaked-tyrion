@@ -85,7 +85,7 @@ def parser(key, adm):
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_VPRESSURE,
             ("PHYSCHEM_ID", adm),
             make_fields([],
-                        ["loqualifier", "temp_value"])),
+                        ["loqualifier", "temp_value", "pressure_loqualifier"])),
 
         "partition coefficient": lambda data: save_data(
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_PARTC,
@@ -178,4 +178,4 @@ def granulometry(data, adm):
         ("PHYSCHEM_ID", adm),
         make_fields([("remarks", ".REM"),
                      ("dist_loqualifier", ".DIST_LOQUALIFIER")],
-                    ["size_loqualifier"]))
+                    ["size_loqualifier", "loqualifier"]))
