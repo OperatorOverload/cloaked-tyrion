@@ -315,10 +315,11 @@ def genetic(substance, path):
             study_type = "reproduction"
 
         table = {
-            "genetic": ECHA_TOX_CRM_MUTA_DATA,
-            "carcinogenicity": ECHA_TOX_CRM_CARC_DATA,
-            "reproduction": ECHA_TOX_CRM_REPR_DATA
-        }
+            "genetic": ECHA_TOX_CRM_RESULT,
+            "carcinogenicity": ECHA_TOX_CRM_DATA,
+            "reproduction": ECHA_TOX_CRM_DATA
+        }[study_type]
+
         fields = {
             "genetic": make_fields([],
                                    ["organism", "met_act_indicator", "testsystem",
@@ -327,15 +328,21 @@ def genetic(substance, path):
                                     "pos_contr_valid"]),
             "carcinogenicity": make_fields([],
                                            ["endpoint", "effecttype", "loqualifier",
-                                            "sex"]),
+                                            "sex", "generation"]),
             "reproduction": make_fields([],
                                         ["endpoint", "effecttype", "generation",
                                          "sex", "loqualifier"])
-        }
+        }[study_type]
 
-        save_data(data.find("#GEN_RESULTS_HD"), table[study_type],
+        selector = {
+            "genetic": ".TEST_RS",
+            "carcinogenicity": ".EFFLEVEL",
+            "reproduction": ".EFFLEVEL"
+        }[study_type]
+
+        save_data(data.find("#GEN_RESULTS_HD %s" % selector), table,
                   ("TOX_CRM_ID", adm),
-                  fields[study_type])
+                  fields)
 
 
     map(lambda f: parse_files(path,

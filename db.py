@@ -255,9 +255,8 @@ class ECHA_TOX_CRM_ADM(db.Entity):
 
     GUIDELINES = Set("ECHA_TOX_CRM_GUIDELINES")
     REFS = Set("ECHA_TOX_CRM_REF")
-    MUTA_DATAS = Set("ECHA_TOX_CRM_MUTA_DATA")
-    CARC_DATAS = Set("ECHA_TOX_CRM_CARC_DATA")
-    REPR_DATAS = Set("ECHA_TOX_CRM_REPR_DATA")
+    DATAS = Set("ECHA_TOX_CRM_DATA")
+    RESULTS = Set("ECHA_TOX_CRM_RESULT")
 
 class ECHA_TOX_CRM_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_GL_ID",
@@ -266,20 +265,16 @@ class ECHA_TOX_CRM_GUIDELINES(db.Entity):
 class ECHA_TOX_CRM_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REF_ID")
 
-class ECHA_TOX_CRM_MUTA_DATA(db.Entity):
+class ECHA_TOX_CRM_RESULT(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_MUTA_DATA_ID",
                                ["organism", "met_act_indicator", "testsystem", "sex",
                                 "genotoxicity", "toxicity", "cytotoxicity",
                                 "veh_contr_valid", "neg_contr_valid", "pos_contr_valid"])
 
-class ECHA_TOX_CRM_CARC_DATA(db.Entity):
+class ECHA_TOX_CRM_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_CARD_DATA_ID",
-                               ["endpoint", "effecttype", "loqualifier", "sex"])
-
-class ECHA_TOX_CRM_REPR_DATA(db.Entity):
-    __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REPR_DATA_ID",
-                               ["endpoint", "generation", "loqualifier", "sex", "effecttype"])
-
+                               ["endpoint", "effecttype", "loqualifier", "sex",
+                                "generation"])
 
 class ECHA_PHYSCHEM_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "PHYSCHEM_ID",
