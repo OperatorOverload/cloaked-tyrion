@@ -59,14 +59,13 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
     ESR = Optional(unicode, MAX_LENGTH)
     RELIABILITY = Optional(unicode, MAX_LENGTH)
-    GUIDELINE = Optional(unicode, MAX_LENGTH)
-    QUALIFIER = Optional(unicode, MAX_LENGTH)
     GLP = Optional(unicode, MAX_LENGTH)
     ORGANISM = Optional(unicode, MAX_LENGTH*3)
     TESTMAT_INDICATOR = Optional(unicode, MAX_LENGTH)
     DATAWAIVING = Optional(unicode, MAX_LENGTH)
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
+    GUIDELINES = Set("ECHA_ECOTOX_TOX_GUIDELINES")
 
 class ECHA_ECOTOX_TOX_REF(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
@@ -88,6 +87,10 @@ class ECHA_ECOTOX_TOX_DATA(db.Entity):
     EFF_CONC_TYPE = Optional(unicode, MAX_LENGTH)
     BASIS_EFFECT = Optional(unicode, MAX_LENGTH)
     REMARKS = Optional(unicode, MAX_LENGTH)
+
+class ECHA_ECOTOX_TOX_GUIDELINES(db.Entity):
+    __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_GL_ID",
+                               ["guideline", "qualifier", "deviation"])
 
 
 class ECHA_TOX_DNEL(db.Entity):

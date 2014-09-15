@@ -76,8 +76,6 @@ def toxicity(files, substance, tox_type):
 
         esr = d("#page_header h2").text()
         reliability = pick_by_label(data, "Reliability").find(".value").text()
-        guideline = pick_by_label(data, "Guideline").find(".value").text()
-        qualifier = pick_by_label(data, "Qualifier").find(".value").text()
         glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
         organism = data.find(".ORGANISM").find(".value:first").text()
         testmat = data.find(".TESTMAT_INDICATOR").find(".value").text()
@@ -88,15 +86,15 @@ def toxicity(files, substance, tox_type):
                                   TOX_TYPE=tox_type,
                                   ESR=esr,
                                   RELIABILITY=reliability,
-                                  GUIDELINE=guideline,
-                                  QUALIFIER=qualifier,
                                   GLP=glp,
                                   ORGANISM=organism,
                                   TESTMAT_INDICATOR=testmat,
                                   DATAWAIVING=datawaiving)
 
-        #references(aqua_adm, data)
+        references(aqua_adm, data)
         datas(aqua_adm, data)
+        save_guidelines(data, ECHA_ECOTOX_TOX_GUIDELINES,
+                        ("TOX_ID", aqua_adm))
 
 @db_session
 def references(aqua_adm, data):
