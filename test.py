@@ -19,6 +19,14 @@ def test_acute_data():
 
     tk.acute(substance, "data/DISS-9daa7594-c409-0ed0-e044-00144f67d249")
 
+@db_session
+def test_dermal_data():
+    substance = select(s for s in Substance
+                       if s.DOSSIER_ID == "DISS-9daa7594-c409-0ed0-e044-00144f67d249").limit(1)[0]
+
+    tk.dermal(substance, "data/DISS-9daa7594-c409-0ed0-e044-00144f67d249")
+
 if __name__ == '__main__':
     #test_aqua_parse()
-    test_acute_data()
+    #test_acute_data()
+    test_dermal_data()
