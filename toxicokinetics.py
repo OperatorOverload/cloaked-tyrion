@@ -41,7 +41,7 @@ def basic(substance, path):
                   ("TOX_BTK_ID", basic))
 
         logging.info("Data")
-        save_data(data.find("#GEN_RESULTS_HD"),
+        save_data(data,
                   ECHA_TOX_BTK_DATA,
                   ("TOX_BTK_ID", basic),
                   [("organism", ".ORGANISM"),
