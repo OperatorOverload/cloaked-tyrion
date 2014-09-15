@@ -403,6 +403,9 @@ db.generate_mapping(create_tables=True)
 
 
 def find_or_create(model, **kwargs):
+    if not any(has_len(value) for k, value in kwargs.items()):
+        return None
+
     kwargs = {key: max_len(value) for key, value in kwargs.items()}
     obj = model.get(**kwargs)
     if obj == None:
@@ -412,3 +415,6 @@ def find_or_create(model, **kwargs):
 
 def max_len(value):
     return value[:MAX_LENGTH] if type(value) == str and len(value) > MAX_LENGTH else value
+
+def has_len(value):
+    return len(value) > 0 if type(value) == str else False

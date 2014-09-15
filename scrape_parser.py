@@ -95,7 +95,7 @@ def toxicity(files, substance, tox_type):
                                   TESTMAT_INDICATOR=testmat,
                                   DATAWAIVING=datawaiving)
 
-        references(aqua_adm, data)
+        #references(aqua_adm, data)
         datas(aqua_adm, data)
 
 @db_session
@@ -116,6 +116,7 @@ def references(aqua_adm, data):
 @db_session
 def datas(aqua_adm, data):
     logging.info("Datas for %s" % aqua_adm.ESR)
+
     for data in data.find("#GEN_RESULTS_HD .set"):
         data = pq(data)
 
