@@ -101,7 +101,7 @@ def dermal(substance, path):
                   [("timepoint", ".TIMEPOINT"),
                    ("dose", ".DOSE"),
                    ("loqualifier", ".LOQUALIFIER"),
-                   ("remarks", ".REMARKS")])
+                   ("remarks", ".REM")])
 
 def acute(substance, path):
     files = build_path(path,
