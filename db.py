@@ -115,7 +115,7 @@ class ECHA_TOX_BTK_ADM(db.Entity):
 
 class ECHA_TOX_BTK_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_BTK_ID", ECHA_TOX_BTK_ADM), "TOX_BTK_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 
 class ECHA_TOX_BTK_REF(db.Entity):
@@ -141,7 +141,7 @@ class ECHA_TOX_DA_ADM(db.Entity):
 
 class ECHA_TOX_DA_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_DA_ID", ECHA_TOX_DA_ADM), "TOX_DA_GL_ID",
-                                ["guideline", "qualifier"])
+                                ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_DA_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_DA_ID", ECHA_TOX_DA_ADM), "TOX_DA_REF_ID")
@@ -163,7 +163,7 @@ class ECHA_TOX_ACUTE_ADM(db.Entity):
 
 class ECHA_TOX_ACUTE_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_ACUTE_ID", ECHA_TOX_ACUTE_ADM), "TOX_ACUTE_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_ACUTE_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_ACUTE_ID", ECHA_TOX_ACUTE_ADM), "TOX_ACUTE_REF_ID")
@@ -187,7 +187,7 @@ class ECHA_TOX_IC_ADM(db.Entity):
 
 class ECHA_TOX_IC_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_IC_ID", ECHA_TOX_IC_ADM), "TOX_IC_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_IC_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_IC_ID", ECHA_TOX_IC_ADM), "TOX_IC_REF_ID")
@@ -212,7 +212,7 @@ class ECHA_TOX_SENS_ADM(db.Entity):
 
 class ECHA_TOX_SENS_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_SENS_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_REF_ID")
@@ -234,7 +234,7 @@ class ECHA_TOX_RDT_ADM(db.Entity):
 
 class ECHA_TOX_RDT_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_RDT_ID", ECHA_TOX_RDT_ADM), "TOX_RDT_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_RDT_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_RDT_ID", ECHA_TOX_RDT_ADM), "TOX_RDT_REF_ID")
@@ -260,7 +260,7 @@ class ECHA_TOX_CRM_ADM(db.Entity):
 
 class ECHA_TOX_CRM_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_TOX_CRM_REF(db.Entity):
     __metaclass__ = make_ref(("TOX_CRM_ID", ECHA_TOX_CRM_ADM), "TOX_CRM_REF_ID")
@@ -308,7 +308,7 @@ class ECHA_PHYSCHEM_ADM(db.Entity):
 
 class ECHA_PHYSCHEM_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GL_ID",
-                               ["guideline", "qualifier"])
+                               ["guideline", "qualifier", "deviation"])
 
 class ECHA_PHYSCHEM_REF(db.Entity):
     __metaclass__ = make_ref(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_REF_ID")

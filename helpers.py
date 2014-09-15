@@ -80,7 +80,8 @@ def save_guidelines(data, table, parent):
     return save_data(data.find(".set.GUIDELINE"),
                      table, parent,
                      [("guideline", ".GUIDELINE"),
-                      ("qualifier", ".QUALIFIER")])
+                      ("qualifier", ".QUALIFIER"),
+                      ("deviation", ".DEVIATION")])
 
 def parse_files(path, path_parts, step_func):
     files = build_path(path, path_parts)

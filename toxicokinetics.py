@@ -33,7 +33,8 @@ def basic(substance, path):
                   ECHA_TOX_BTK_GUIDELINES,
                   ("TOX_BTK_ID", basic),
                   [("guideline", ".GUIDELINE"),
-                   ("qualifier", ".QUALIFIER")])
+                   ("qualifier", ".QUALIFIER"),
+                   ("deviation", ".DEVIATION")])
 
         logging.info("Reference")
         save_refs(data,
@@ -87,7 +88,8 @@ def dermal(substance, path):
                   ECHA_TOX_DA_GUIDELINES,
                   ("TOX_DA_ID", adm),
                   [("guideline", ".GUIDELINE"),
-                   ("qualifier", ".QUALIFIER")])
+                   ("qualifier", ".QUALIFIER"),
+                   ("deviation", ".DEVIATION")])
 
         logging.info("Refs")
         save_refs(data,
