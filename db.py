@@ -220,7 +220,7 @@ class ECHA_TOX_SENS_REF(db.Entity):
 class ECHA_TOX_SENS_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_SENS_ID", ECHA_TOX_SENS_ADM), "TOX_SENS_DATA_ID",
                                ["reading", "timepoint", "group", "number_positive",
-                                "number_total", "remarks"])
+                                "number_total", "remarks", "clinical_observ"])
 
 class ECHA_TOX_RDT_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_RDT_ID",

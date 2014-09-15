@@ -237,7 +237,8 @@ def sensitisation(substance, path):
                                "timepoint",
                                "group",
                                "number_positive",
-                               "number_total"]))
+                               "number_total",
+                               "clinical_observ"]))
 
 
     parse_files(path, ["toxicological information", "sensitisation", "SSS"], step)
