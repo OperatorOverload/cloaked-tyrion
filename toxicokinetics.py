@@ -149,7 +149,8 @@ def acute(substance, path):
                    ("loqualifier",),
                    ("exp_period_value",),
                    ("conf_limits_loqualifier",),
-                   ("remarks", ".REM")])
+                   ("remarks", ".REM"),
+                   ("value_loqualifier",)])
 
 def irritation(substance, path):
     files = build_path(path,

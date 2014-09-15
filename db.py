@@ -171,7 +171,8 @@ class ECHA_TOX_ACUTE_REF(db.Entity):
 class ECHA_TOX_ACUTE_DATA(db.Entity):
     __metaclass__ = make_model(("TOX_ACUTE_ID", ECHA_TOX_ACUTE_ADM), "TOX_ACUTE_DATA_ID",
                                ["sex", "endpoint", "loqualifier", "exp_period_value",
-                                "conf_limits_loqualifier", "remarks"])
+                                "conf_limits_loqualifier", "remarks",
+                                "value_loqualifier"])
 
 class ECHA_TOX_IC_ADM(db.Entity):
     __metaclass__ = make_model(("SUBST_ID", Substance), "TOX_IC_ID",
