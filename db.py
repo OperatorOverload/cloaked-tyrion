@@ -60,7 +60,7 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
                                 "oxygen_conditions", "inoculum", "reference_substance",
                                 "validity_crit_subm", "interpret_results_subm"])
 
-    TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT
+    TOX_TYPE = Required(unicode) # AQUATIC, TERRESTRIAL, SEDIMENT, BIOACC, BIODEGRAD
 
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")

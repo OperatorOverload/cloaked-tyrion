@@ -68,6 +68,13 @@ def sediment(substance, path):
                         "thingsthingsthings"])
     toxicity(files, substance, "SEDIMENT")
 
+def bioacc(substance, path):
+    files = build_path(path,
+                       ["ecotoxicological information",
+                        " toxicity",
+                        "thingsthingsthings"])
+    toxicity(files, substance, "SEDIMENT")
+
 @db_session
 def toxicity(files, substance, tox_type):
     for file in glob.glob(files.replace("thingsthingsthings", "*")):
