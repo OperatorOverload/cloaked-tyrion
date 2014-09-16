@@ -46,7 +46,8 @@ def key(file):
                              "auto flammability", "flammability",
                              "oxidising properties", "stability in organic solvents",
                              "dissociation constant", "ph", "viscosity",
-                             "particle size distribution"]
+                             "particle size distribution",
+                             "solubility in organic solvents"]
                  if "__%s" % slugify(k) in file]
 
     return candidate[0] if candidate else None
@@ -155,7 +156,13 @@ def parser(key, adm):
                         ["loqualifier", "temp_value"])),
 
         "particle size distribution": lambda data: granulometry(data, adm),
+
+        "solubility in organic solvents": lambda data: save_data(
+            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_FATSOL,
+            ("PHYSCHEM_ID", adm),
+            make_fields([], ["organic_medium", "loqualifier", "temp_value"]))
     }[key]
+
 
 def granulometry(data, adm):
     save_data(

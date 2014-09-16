@@ -307,6 +307,7 @@ class ECHA_PHYSCHEM_ADM(db.Entity):
     MMDS = Set("ECHA_PHYSCHEM_GRANULOMETRY_MMD")
     PSS = Set("ECHA_PHYSCHEM_GRANULOMETRY_PS")
     DISTS = Set("ECHA_PHYSCHEM_GRANULOMETRY_DIST")
+    FATSOLS = Set("ECHA_PHYSCHEM_FATSOL")
 
 class ECHA_PHYSCHEM_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GL_ID",
@@ -395,6 +396,10 @@ class ECHA_PHYSCHEM_GRANULOMETRY_DIST(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_GMT_DIST_ID",
                                ["size_loqualifier", "dist_loqualifier", "remarks",
                                 "loqualifier"])
+
+class ECHA_PHYSCHEM_FATSOL(db.Entity):
+    __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_FS_ID",
+                               ["organic_medium", "loqualifier", "temp_value"])
 
 
 db.generate_mapping(create_tables=True)
