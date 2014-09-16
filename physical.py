@@ -121,8 +121,14 @@ def parser(key, adm):
         "flammability": lambda data: save_data(
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_FLAMMABILITY,
             ("PHYSCHEM_ID", adm),
-            make_fields([("interpret_results_subm", ".REM_RS")],
-                        ["pyrophoric_properties", "loexplos_limit", "upexplos_limit"])),
+            make_fields([("interpret_results_subm", ".INTERPRET_RESULTS_SUBM"),
+                         ("pyrophoric_ignition_contact", ".PYROPHORIC_PROPERTIES .IGNITION_CONTACT"),
+                         ("pyrophoric_rem", ".PYROPHORIC_PROPERTIES .REM"),
+                         ("loexplos_limit", ".LOEXPLOS_LIMIT .LOQUALIFIER"),
+                         ("loexplos_rem", ".LOEXPLOS_LIMIT .REM"),
+                         ("upexplos_limit", ".UPEXPLOS_LIMIT .LOQUALIFIER"),
+                         ("upexplos_rem", ".UPEXPLOS_LIMIT .REM")],
+                        [])),
 
         "oxidising properties": lambda data: save_data(
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_OXIDIZING_PROP,

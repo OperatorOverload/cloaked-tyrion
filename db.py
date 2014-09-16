@@ -360,8 +360,10 @@ class ECHA_PHYSCHEM_AUTOFLAM(db.Entity):
 
 class ECHA_PHYSCHEM_FLAMMABILITY(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_FLAMM_ID",
-                               ["pyrophoric_properties", "loexplos_limit",
-                                "upexplos_limit", "interpret_results_subm"])
+                               ["pyrophoric_ignition_contact", "pyrophoric_rem",
+                                "loexplos_limit", "loexplos_rem",
+                                "upexplos_limit", "upexplos_rem",
+                                "interpret_results_subm"])
 
 class ECHA_PHYSCHEM_OXIDIZING_PROP(db.Entity):
     __metaclass__ = make_model(("PHYSCHEM_ID", ECHA_PHYSCHEM_ADM), "PHYSCHEM_OXI_ID",
