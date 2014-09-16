@@ -121,9 +121,8 @@ def parser(key, adm):
         "flammability": lambda data: save_data(
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_FLAMMABILITY,
             ("PHYSCHEM_ID", adm),
-            make_fields([],
-                        ["pyrophoric_properties", "loexplos_limit", "upexplos_limit",
-                         "interpret_results_subm"])),
+            make_fields([("interpret_results_subm", ".REM_RS")],
+                        ["pyrophoric_properties", "loexplos_limit", "upexplos_limit"])),
 
         "oxidising properties": lambda data: save_data(
             data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_OXIDIZING_PROP,
