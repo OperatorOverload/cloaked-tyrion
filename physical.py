@@ -63,57 +63,57 @@ def parser(key, adm):
                         ["form", "odour"])),
 
         "melting point": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_MELTING,
+            data.find("#GEN_RESULTS_HD .MELTINGPT"), ECHA_PHYSCHEM_MELTING,
             ("PHYSCHEM_ID", adm),
             make_fields([("pressure", ".PRESSURE_LOQUALIFIER")],
                         ["loqualifier", "decomp_indicator",
                          "sublimation_indicator"])),
 
         "boiling point": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_BOILING,
+            data.find("#GEN_RESULTS_HD .BOILINGPT"), ECHA_PHYSCHEM_BOILING,
             ("PHYSCHEM_ID", adm),
             make_fields([("pressure", ".PRESSURE_LOQUALIFIER")],
                         ["loqualifier", "decomp_indicator",
                          "sublimation_indicator"])),
 
         "density": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_DENSITY,
+            data.find("#GEN_RESULTS_HD .DENSITY"), ECHA_PHYSCHEM_DENSITY,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["type", "loqualifier", "temp_value"])),
 
         "vapour pressure": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_VPRESSURE,
+            data.find("#GEN_RESULTS_HD .VAPOURPR"), ECHA_PHYSCHEM_VPRESSURE,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["loqualifier", "temp_value", "pressure_loqualifier"])),
 
         "partition coefficient": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_PARTC,
+            data.find("#GEN_RESULTS_HD .PARTCOEFF"), ECHA_PHYSCHEM_PARTC,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["type", "loqualifier", "temp_value", "ph_loqualifier"])),
 
         "water solubility": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_WSOLUBILITY,
+            data.find("#GEN_RESULTS_HD .WATERSOL"), ECHA_PHYSCHEM_WSOLUBILITY,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["loqualifier", "temp_value", "ph_loqualifier"])),
 
         "surface tension": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_STENSION,
+            data.find("#GEN_RESULTS_HD .TENSION"), ECHA_PHYSCHEM_STENSION,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["loqualifier", "temp_value", "conc_value"])),
 
         "flash point": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_FPOINT,
+            data.find("#GEN_RESULTS_HD .FLASHPT"), ECHA_PHYSCHEM_FPOINT,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["loqualifier", "press_loqualifier"])),
 
         "auto flammability": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_AUTOFLAM,
+            data.find("#GEN_RESULTS_HD .AUTOFLAM"), ECHA_PHYSCHEM_AUTOFLAM,
             ("PHYSCHEM_ID", adm),
             make_fields([],
                         ["loqualifier", "press_loqualifier"])),
@@ -131,19 +131,19 @@ def parser(key, adm):
                         [])),
 
         "oxidising properties": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_OXIDIZING_PROP,
+            data.find("#GEN_RESULTS_HD .RESULT"), ECHA_PHYSCHEM_OXIDIZING_PROP,
             ("PHYSCHEM_ID", adm),
             make_fields([("remarks", ".REM")],
                         ["parameter", "loqualifier"])),
 
         "stability in organic solvents": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_ORG_SOL_DEGRADATION,
+            data.find("#GEN_RESULTS_HD .STABLE"), ECHA_PHYSCHEM_ORG_SOL_DEGRADATION,
             ("PHYSCHEM_ID", adm),
             make_fields([("identity", ".ID")],
                         ["no", "identifier"])),
 
         "dissociation constant": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_DISSCO,
+            data.find("#GEN_RESULTS_HD .PKA"), ECHA_PHYSCHEM_DISSCO,
             ("PHYSCHEM_ID", adm),
             make_fields([("remarks", ".REM")],
                         ["no", "value_loqualifier", "temp_value"])),
@@ -155,7 +155,7 @@ def parser(key, adm):
                         ["loqualifier", "temp_value", "conc_loqualifier"])),
 
         "viscosity": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_VISCOSITY,
+            data.find("#GEN_RESULTS_HD .VISCOS"), ECHA_PHYSCHEM_VISCOSITY,
             ("PHYSCHEM_ID", adm),
             make_fields([("remarks", ".REM")],
                         ["loqualifier", "temp_value"])),
@@ -163,7 +163,7 @@ def parser(key, adm):
         "particle size distribution": lambda data: granulometry(data, adm),
 
         "solubility in organic solvents": lambda data: save_data(
-            data.find("#GEN_RESULTS_HD"), ECHA_PHYSCHEM_FATSOL,
+            data.find("#GEN_RESULTS_HD .FATSOL"), ECHA_PHYSCHEM_FATSOL,
             ("PHYSCHEM_ID", adm),
             make_fields([], ["organic_medium", "loqualifier", "temp_value"]))
     }[key]
