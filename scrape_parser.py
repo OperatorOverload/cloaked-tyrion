@@ -69,14 +69,71 @@ def sediment(substance, path):
     toxicity(files, substance, "SEDIMENT")
 
 def bioacc(substance, path):
+    def more_stuff(adm):
+        def step(d, data, file):
+            save_data(data.find(".set.BCF", ECHA_ECOTOX_TOX_BCF,
+                                ("TOX_ID", adm),
+                                make_fields([],
+                                            ["type", "loqualifier"])))
+
+        parse_files(path,
+                    ["environmental fate and pathways", "bioaccumulation",
+                     "identity of degradation products"],
+                     step)
+
     files = build_path(path,
-                       ["ecotoxicological information",
-                        " toxicity",
+                       ["environmental fate and pathways",
+                        "bioaccumulation",
                         "thingsthingsthings"])
-    toxicity(files, substance, "SEDIMENT")
+    toxicity(files, substance, "BIOACC", more_stuff)
+
+def biodegrad(substance, path):
+    def more_stuff(adm):
+        def step1(d, data, file):
+            save_data(data.find(".set.DEGRAD"), ECHA_ECOTOX_TOX_BIODEGRAD,
+                      ("TOX_ID", adm),
+                      make_fields([],
+                                  ["soilnumber", "loqualifier", "stdev", "parameter",
+                                   "timepoint_value", "rem"]))
+
+        def step2(d, data, file):
+            save_data(data.find(".set.BOD5"), ECHA_ECOTOX_TOX_BOD,
+                      ("TOX_ID", adm),
+                      make_fields([],
+                                  ["parameter", "loqualifier"]))
+
+        def step3(d, data, file):
+            save_data(data.find(".set.TRANSF_PRODUCTS_ID"), ECHA_ECOTOX_TOX_DEGPROD,
+                      ("TOX_ID", adm),
+                      make_fields([("identifier", ".ID")],
+                                  ["no", "identifier"]))
+
+        parse_files(path,
+                    ["environmental fate and pathways", "biodegradation",
+                     "degradation of test substance", "SSS"],
+                     step1)
+
+        parse_files(path,
+                    ["environmental fate and pathways", "biodegradation",
+                     "bod5 cod", "SSS"],
+                     step2)
+
+        parse_files(path,
+                    ["environmental fate and pathways", "biodegradation",
+                     "identity of degradation products", "SSS"],
+                     step3)
+
+
+    files = build_path(path,
+                       ["environmental fate and pathways",
+                        "biodegradation",
+                        "thingsthingsthings"])
+    toxicity(files, substance, "BIODEGRAD", more_stuff)
+
+
 
 @db_session
-def toxicity(files, substance, tox_type):
+def toxicity(files, substance, tox_type, extra=None):
     for file in glob.glob(files.replace("thingsthingsthings", "*")):
         d = open_file(file)
         data = d("#inner")
@@ -108,6 +165,9 @@ def toxicity(files, substance, tox_type):
         datas(aqua_adm, data)
         save_guidelines(data, ECHA_ECOTOX_TOX_GUIDELINES,
                         ("TOX_ID", aqua_adm))
+
+        if extra:
+            extra(aqua_adm)
 
 @db_session
 def references(aqua_adm, data):
@@ -217,6 +277,12 @@ def parse(path):
 
     logging.info("Sediment toxicity for %s" % dossier_id)
     sediment(substance, path)
+
+    logging.info("Biodegradation for %s" % dossier_id)
+    biodegrad(substance, path)
+
+    logging.info("Bioaccumulation for %s" % dossier_id)
+    bioacc(substance, path)
 
     logging.info("Dnels for %s" % dossier_id)
     dnel(substance, path)
