@@ -65,6 +65,10 @@ class ECHA_ECOTOX_TOX_ADM(db.Entity):
     REFS = Set("ECHA_ECOTOX_TOX_REF")
     DATAS = Set("ECHA_ECOTOX_TOX_DATA")
     GUIDELINES = Set("ECHA_ECOTOX_TOX_GUIDELINES")
+    BIODEGRADS = Set("ECHA_ECOTOX_TOX_BIODEGRAD")
+    BODS = Set("ECHA_ECOTOX_TOX_BOD")
+    DEGPRODS = Set("ECHA_ECOTOX_TOX_DEGPROD")
+    BCFS = Set("ECHA_ECOTOX_TOX_BCF")
 
 class ECHA_ECOTOX_TOX_REF(db.Entity):
     TOX_ID = Required(ECHA_ECOTOX_TOX_ADM)
@@ -90,6 +94,23 @@ class ECHA_ECOTOX_TOX_DATA(db.Entity):
 class ECHA_ECOTOX_TOX_GUIDELINES(db.Entity):
     __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_GL_ID",
                                ["guideline", "qualifier", "deviation"])
+
+class ECHA_ECOTOX_TOX_BIODEGRAD(db.Entity):
+    __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_BD_ID",
+                               ["soilnumber", "loqualifier", "stdev", "parameter",
+                                "timepoint_value", "rem"])
+
+class ECHA_ECOTOX_TOX_BOD(db.Entity):
+    __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_BOD_ID",
+                               ["parameter", "loqualifier"])
+
+class ECHA_ECOTOX_TOX_DEGPROD(db.Entity):
+    __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_DP_ID",
+                               ["no", "identifier", "identity"])
+
+class ECHA_ECOTOX_TOX_BCF(db.Entity):
+    __metaclass__ = make_model(("TOX_ID", ECHA_ECOTOX_TOX_ADM), "TOX_BCF_ID",
+                               ["type", "loqualifier"])
 
 
 class ECHA_TOX_DNEL(db.Entity):
