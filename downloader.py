@@ -133,9 +133,9 @@ def name(link):
     return name
 
 if __name__ == '__main__':
-    process("DISS-9daa7594-c409-0ed0-e044-00144f67d249")
+    #process("DISS-9daa7594-c409-0ed0-e044-00144f67d249")
     #process("DISS-9d998764-70a1-6fbe-e044-00144f67d249")
-    #for line in open("dossiers.txt"):
-    #    process(line.strip())
+    for line in open("dossiers.txt"):
+        process(line.strip())
 
     print "Done."
