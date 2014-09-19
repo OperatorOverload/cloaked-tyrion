@@ -140,9 +140,9 @@ def toxicity(files, substance, tox_type, extra=None):
 
         esr = d("#page_header h2").text()
         reliability = pick_by_label(data, "Reliability").find(".value").text()
-        glp = data.find(".GLP_COMPLIANCE_STATEMENT").find(".value").text()
-        organism = data.find(".ORGANISM").find(".value:first").text()
-        testmat = data.find(".TESTMAT_INDICATOR").find(".value").text()
+        glp = value_by_select(data, ".GLP_COMPLIANCE_STATEMENT")
+        organism = value_by_select(data, ".ORGANISM")
+        testmat = value_by_select(data, ".TESTMAT_INDICATOR")
         datawaiving = value_by_select(data, ".dataWaiving")
 
         aqua_adm = find_or_create(ECHA_ECOTOX_TOX_ADM,
