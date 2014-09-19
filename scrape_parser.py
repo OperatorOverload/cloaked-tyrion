@@ -312,6 +312,6 @@ if __name__ == "__main__":
     for file in os.listdir(os.path.join(os.getcwd(), "data")):
         if file.startswith("DISS") and file.endswith(".tar.gz"):
             parse(os.path.join(os.getcwd(), "data", file))
-            #cleanup(os.path.join(os.getcwd(), "data", file))
+            cleanup(os.path.join(os.getcwd(), "data", file))
 
     print "Done."
