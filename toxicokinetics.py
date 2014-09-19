@@ -290,7 +290,7 @@ def genetic(substance, path):
                                      ("glp", ".GLP_COMPLIANCE_STATEMENT"),
                                      ("datawaiving", ".dataWaiving"),
                                      ("sex", ".SEX:first"),
-                                     ("organism", ".ORGANISM:first")],
+                                     ("organism", ".ORGANISM")],
                                     ["genotoxicity_type",
                                      "studytype",
                                      "testtype_tox",

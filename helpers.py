@@ -25,9 +25,9 @@ def value_by_select(data, selector):
                                        ["QUALIFIER", ".FORM", ".ODOUR", ".TEMP_VALUE",
                                         "EXPLOS_LIMIT", ".PERCENTILE", "_VALUE",
                                         "PHYSICAL_STATE", "STDEV", "PARAMETER"]):
-        return d.html() or ""
+        return d.html()[:MAX_LENGTH] or ""
     else:
-        return d.text()
+        return d.text()[:MAX_LENGTH]
 
 def html_value_by_select(data, selector):
     return data.find("%s .value" % selector).html() or ""
