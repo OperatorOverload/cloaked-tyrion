@@ -110,17 +110,17 @@ def biodegrad(substance, path):
 
         parse_files(path,
                     ["environmental fate and pathways", "biodegradation",
-                     "degradation of test substance", "SSS"],
+                     "SSS", "SSS"],
                      step1)
 
         parse_files(path,
                     ["environmental fate and pathways", "biodegradation",
-                     "bod5 cod", "SSS"],
+                     "SSS", "SSS"],
                      step2)
 
         parse_files(path,
                     ["environmental fate and pathways", "biodegradation",
-                     "identity of degradation products", "SSS"],
+                     "SSS", "SSS"],
                      step3)
 
 
