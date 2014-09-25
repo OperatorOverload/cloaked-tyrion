@@ -71,14 +71,14 @@ def sediment(substance, path):
 def bioacc(substance, path):
     def more_stuff(adm):
         def step(d, data, file):
-            save_data(data.find(".set.BCF", ECHA_ECOTOX_TOX_BCF,
+            save_data(data.find(".set.BCF"), ECHA_ECOTOX_TOX_BCF,
                                 ("TOX_ID", adm),
                                 make_fields([],
-                                            ["type", "loqualifier"])))
+                                            ["type", "loqualifier"]))
 
         parse_files(path,
                     ["environmental fate and pathways", "bioaccumulation",
-                     "identity of degradation products"],
+                     "sss", "sss"],
                      step)
 
     files = build_path(path,
